@@ -7,7 +7,7 @@
 .RDataTmp
 
 # Data Files
-# Flowshed_Modeling_AG/DATAFILE/
+/Flowshed_Modeling_InputData/BowtieFractions_Jan10
 
 # Never allow shapefiles
 .dbf
