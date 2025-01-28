@@ -14,23 +14,19 @@
 /Flowshed_Modeling_InputData/mesh_florida
 /Flowshed_Modeling_InputData/yearBows_22april2024
 
-
 # Never allow shapefiles
 .dbf
 .prj
 .shx
 .shp
 
-# NO .gdb files (including Florida's Unified Reef Map)
+# No .gdb files (including Florida's Unified Reef Map)
 .gdb
 /Flowshed_Modeling_InputData/FWC_UnifiedFloridaReefMap_v2.0.gdb
 
-# .nc SST data files
-/D.SST_ncU+2069/*/*
-#/D.SST_ncU+2069/Daily_CoralTemp_3.1/
-#/D.SST_ncU+2069/Daily_CWR_DHW_3.1/
-#/D.SST_ncU+2069/Daily_OISST_v2/
-/D.SST_nc/*.nc
+# Ignore larger .csv files (specify which ones)
+/Flowshed_Modeling_InputData/CCfractions_fix.csv
+/Flowshed_Modeling_InputData/CCmodelDF_April26.csv
 
 # User-specific files
 .Ruserdata
