@@ -1,0 +1,128 @@
+﻿,Coral,Bio,BioNoCoral,nCor,nBio,ClassLv4,Algae,Seagrass,NotBio
+Acropora cervicornis,0.7,0.7,0,0,0,Acropora cervicornis,0,0,0.3
+Aggregate Reef,0.324808392,0.605635838,0.280827446,0,0,Aggregate Reef,0.280827446,0,0.394364162
+Aggregate Reef (Inner),0.324808392,0.605635838,0.280827446,0,0,Aggregate Reef (Inner),0.280827446,0,0.394364162
+Aggregate Reef (Middle),0.324808392,0.605635838,0.280827446,0,0,Aggregate Reef (Middle),0.280827446,0,0.394364162
+Aggregate Reef (Outer),0.324808392,0.605635838,0.280827446,0,0,Aggregate Reef (Outer),0.280827446,0,0.394364162
+"Aggregate Reef, Algae (Continuous)",0.096296296,0.95,0.853703704,27,28,"Aggregate Reef, Algae (Continuous)",0.853703704,0,0.05
+"Aggregate Reef, Algae (Discontinuous)",0.227745665,0.683815029,0.456069364,173,173,"Aggregate Reef, Algae (Discontinuous)",0.456069364,0,0.316184971
+"Aggregate Reef, Algae (Patchy)",0,0.7,0.7,0,3,"Aggregate Reef, Algae (Patchy)",0.7,0,0.3
+"Aggregate Reef, Live Coral (Discontinuous)",0.3,0.3,0,1,1,"Aggregate Reef, Live Coral (Discontinuous)",0,0,0.7
+"Aggregate Reef, Live Coral (Patchy)",0.7,0.7,0,100,100,"Aggregate Reef, Live Coral (Patchy)",0,0,0.3
+"Aggregate Reef, Live Coral (Sparse)",0.3,0.3,0,18,18,"Aggregate Reef, Live Coral (Sparse)",0,0,0.7
+"Aggregate Reef, Uncolonized",0,0,0,0,0,"Aggregate Reef, Uncolonized",0,0,1
+Aggregated Patch Reef,0.286097561,0.694536585,0.408439024,0,0,Aggregated Patch Reef,0.408439024,0,0.305463415
+Aggregated Patch Reef (Deep),0.286097561,0.694536585,0.408439024,0,0,Aggregated Patch Reef (Deep),0.408439024,0,0.305463415
+Aggregated Patch Reef (Shallow),0.286097561,0.694536585,0.408439024,0,0,Aggregated Patch Reef (Shallow),0.408439024,0,0.305463415
+"Aggregated Patch Reef, Algae (Discontinuous)",0.286097561,0.694536585,0.408439024,1025,1025,"Aggregated Patch Reef, Algae (Discontinuous)",0.408439024,0,0.305463415
+Artificial,0,0,0,0,0,Artificial,0,0,0
+Artificial Bridge,0,0,0,0,0,Artificial Bridge,0,0,0
+Artificial Land,0,0,0,0,0,Artificial Land,0,0,0
+Artificial Pier,0,0,0,0,0,Artificial Pier,0,0,0
+Colonized Pavement,0.129152057,0.597325516,0.468173459,0,0,Colonized Pavement,0.468173459,0,0.402674484
+Colonized Pavement (Deep),0.129152057,0.597325516,0.468173459,0,0,Colonized Pavement (Deep),0.468173459,0,0.402674484
+Colonized Pavement (Shallow),0.129152057,0.597325516,0.468173459,0,0,Colonized Pavement (Shallow),0.468173459,0,0.402674484
+"Colonized Pavement, Algae",0.072577973,0.631851177,0.559273204,0,0,"Colonized Pavement, Algae",0.559273204,0,0.368148823
+"Colonized Pavement, Live Coral",0.433333333,0.433333333,0,0,0,"Colonized Pavement, Live Coral",0,0,0.566666667
+"Colonized Pavement, Live Coral (Discontinuous)",0.3,0.3,0,65,65,"Colonized Pavement, Live Coral (Discontinuous)",0,0,0.7
+"Colonized Pavement, Live Coral (Patchy)",0.7,0.7,0,81,81,"Colonized Pavement, Live Coral (Patchy)",0,0,0.3
+"Colonized Pavement, Live Coral (Sparse)",0.3,0.3,0,228,228,"Colonized Pavement, Live Coral (Sparse)",0,0,0.7
+Pavement,0.129152057,0.597325516,0.468173459,0,0,Pavement,0.468173459,0,0.402674484
+Pavement with Sand Channels,0.272222222,0.825,0.552777778,0,0,Pavement with Sand Channels,0.552777778,0,0.175
+"Pavement with Sand Channels, Algae (Continuous)",0.3,0.95,0.65,15,15,"Pavement with Sand Channels, Algae (Continuous)",0.65,0,0.05
+"Pavement with Sand Channels, Algae (Discontinuous)",0.244444444,0.7,0.455555556,27,27,"Pavement with Sand Channels, Algae (Discontinuous)",0.455555556,0,0.3
+Pavement with Seagrass,0.110519046,0.634456749,0.523937703,0,0,Pavement with Seagrass,0,0.523937703,0.365543251
+Pavement with Seagrass (Continuous),0.115789474,0.95,0.834210526,19,23,Pavement with Seagrass (Continuous),0,0.834210526,0.05
+"Pavement with Seagrass (Continuous), Bank",0.115789474,0.95,0.834210526,0,0,"Pavement with Seagrass (Continuous), Bank",0,0.834210526,0.05
+Pavement with Seagrass (Discontinuous),0.105248619,0.562295082,0.457046463,181,183,Pavement with Seagrass (Discontinuous),0,0.457046463,0.437704918
+"Pavement with Seagrass (Discontinuous), Bank",0.105248619,0.562295082,0.457046463,0,0,"Pavement with Seagrass (Discontinuous), Bank",0,0.457046463,0.437704918
+Pavement with Seagrass (Patchy),0,0.7,0.7,0,52,Pavement with Seagrass (Patchy),0,0.7,0.3
+Pavement with Seagrass (Sparse),0,0.325531915,0.325531915,0,47,Pavement with Seagrass (Sparse),0,0.325531915,0.674468085
+"Pavement, Algae (Continuous)",0.059668508,0.95,0.890331492,181,188,"Pavement, Algae (Continuous)",0.890331492,0,0.05
+"Pavement, Algae (Discontinuous)",0.10806541,0.596452328,0.488386918,1804,1804,"Pavement, Algae (Discontinuous)",0.488386918,0,0.403547672
+"Pavement, Algae (Patchy)",0.05,0.680952381,0.630952381,5,63,"Pavement, Algae (Patchy)",0.630952381,0,0.319047619
+"Pavement, Algae (Sparse)",0,0.3,0.3,0,46,"Pavement, Algae (Sparse)",0.3,0,0.7
+"Pavement, Live Coral (Infrequent, <10%)",0.05,0.05,0,1,1,"Pavement, Live Coral (Infrequent, <10%)",0,0,0.95
+"Pavement, Turf Algae (Patchy)",0,0.7,0.7,0,4,"Pavement, Turf Algae (Patchy)",0.7,0,0.3
+"Pavement, Turf Algae (Sparse)",0,0.3,0.3,0,2,"Pavement, Turf Algae (Sparse)",0.3,0,0.7
+"Colonized Reef Rubble, Live Coral (Sparse)",0.3,0.3,0,2,2,"Colonized Reef Rubble, Live Coral (Sparse)",0,0,0.7
+Individual Patch Reef,0.431397048,0.49995616,0.068559112,0,0,Individual Patch Reef,0.068559112,0,0.50004384
+"Individual or Aggregated Patch Reef, Algae (Patchy)",0,0.7,0.7,0,0,"Individual or Aggregated Patch Reef, Algae (Patchy)",0.7,0,0.3
+"Individual or Aggregated Patch Reef, Algae (Sparse)",0,0.3,0.3,0,3,"Individual or Aggregated Patch Reef, Algae (Sparse)",0.3,0,0.7
+"Individual or Aggregated Patch Reef, Live Coral (Patchy)",0.7,0.7,0,134,134,"Individual or Aggregated Patch Reef, Live Coral (Patchy)",0,0,0.3
+"Individual or Aggregated Patch Reef, Live Coral (Sparse)",0.3,0.3,0,25,25,"Individual or Aggregated Patch Reef, Live Coral (Sparse)",0,0,0.7
+"Individual Patch Reef, Algae (Discontinuous)",0.294191144,0.699824638,0.405633494,2281,2281,"Individual Patch Reef, Algae (Discontinuous)",0.405633494,0,0.300175362
+Inlet Channel,0,0,0,0,0,Inlet Channel,0,0,1
+Inlet Jetty,0,0,0,0,0,Inlet Jetty,0,0,1
+Land,0,0,0,0,0,Land,0,0,0
+"Land, Emergent Vegetation",0,0,0,0,0,"Land, Emergent Vegetation",0,0,0
+Mud,0.05,0.618949073,0.568949073,0,0,Mud,0.568949073,0,0.381050927
+"Mud, Algae (Continuous)",0.05,0.95,0.9,38,38,"Mud, Algae (Continuous)",0.9,0,0.05
+"Mud, Algae (Discontinuous)",0.05,0.411848341,0.361848341,211,211,"Mud, Algae (Discontinuous)",0.361848341,0,0.588151659
+"Mud, Emergent Vegetation (Continuous)",0.05,0.95,0.9,7,7,"Mud, Emergent Vegetation (Continuous)",0.9,0,0.05
+"Mud, Emergent Vegetation (Discontinuous)",0.05,0.7,0.65,1,1,"Mud, Emergent Vegetation (Discontinuous)",0.65,0,0.3
+"Mud, Live Coral (Infrequent, <10%)",0.05,0.05,0,63,63,"Mud, Live Coral (Infrequent, <10%)",0,0,0.95
+"Mud, Mangrove (Continuous)",0.05,0.95,0.9,1153,1216,"Mud, Mangrove (Continuous)",0.9,0,0.05
+"Mud, Mangrove (Discontinuous)",0.05,0.552211127,0.502211127,701,701,"Mud, Mangrove (Discontinuous)",0.502211127,0,0.447788873
+"Mud, Mangrove (Patchy)",0,0.7,0.7,0,24,"Mud, Mangrove (Patchy)",0.7,0,0.3
+"Mud, Mangrove (Sparse)",0,0.3,0.3,0,15,"Mud, Mangrove (Sparse)",0.3,0,0.7
+"Mud, No Cover",0,0,0,0,0,"Mud, No Cover",0,0,1
+"Mud, Seagrass (Continuous)",0.05,0.95,0.9,754,775,"Mud, Seagrass (Continuous)",0,0.9,0.05
+"Mud, Seagrass (Discontinuous)",0.05,0.532278481,0.482278481,1263,1264,"Mud, Seagrass (Discontinuous)",0,0.482278481,0.467721519
+"Mud, Seagrass (Patchy)",0,0.7,0.7,0,4,"Mud, Seagrass (Patchy)",0,0.7,0.3
+"Mud, Seagrass (Sparse)",0,0.3,0.3,0,2,"Mud, Seagrass (Sparse)",0,0.3,0.7
+Ridge,0.226980225,0.601480677,0.374500452,0,0,Ridge,0.374500452,0,0.398519323
+Deep Ridge Complex,0.226980225,0.601480677,0.374500452,0,0,Deep Ridge Complex,0.374500452,0,0.398519323
+Nearshore Ridge Complex (Shallow),0.226980225,0.601480677,0.374500452,0,0,Nearshore Ridge Complex (Shallow),0.374500452,0,0.398519323
+Reef Terrace (High Profile),0.324808392,0.605635838,0.280827446,0,0,Reef Terrace (High Profile),0.280827446,0,0.394364162
+Remnant Reef (Low Profile),0.129152057,0.597325516,0.468173459,0,0,Remnant Reef (Low Profile),0.468173459,0,0.402674484
+Dredged/Excavated,0,0,0,0,0,Dredged/Excavated,0,0,1
+Not Classified,NA,NA,NA,0,0,Not Classified,NA,NA,NA
+Reef Rubble,0.05623053,0.513197395,0.456966865,0,0,Reef Rubble,0.456966865,0,0.486802605
+Reef Rubble with Seagrass,0.05,0.409090909,0.359090909,0,0,Reef Rubble with Seagrass,0,0.359090909,0.590909091
+Reef Rubble with Seagrass (Discontinuous),0.05,0.409090909,0.359090909,11,11,Reef Rubble with Seagrass (Discontinuous),0,0.359090909,0.590909091
+"Reef Rubble, Algae (Continuous)",0.05,0.95,0.9,18,18,"Reef Rubble, Algae (Continuous)",0.9,0,0.05
+"Reef Rubble, Algae (Discontinuous)",0.068691589,0.670093458,0.601401869,107,107,"Reef Rubble, Algae (Discontinuous)",0.601401869,0,0.329906542
+"Reef Rubble, Algae (Patchy)",0,0.7,0.7,0,1,"Reef Rubble, Algae (Patchy)",0.7,0,0.3
+"Reef Rubble, Algae (Sparse)",0,0.3,0.3,0,1,"Reef Rubble, Algae (Sparse)",0.3,0,0.7
+"Reef Rubble, Live Coral (Infrequent, <10%)",0.05,0.05,0,1,1,"Reef Rubble, Live Coral (Infrequent, <10%)",0,0,0.95
+Sand,0.05,0.05,0,1,1,Sand,0,0,0.95
+Sand (Deep),0.05,0.05,0,0,0,Sand (Deep),0,0,0.95
+Sand (No Cover),0,0,0,0,0,Sand (No Cover),0,0,1
+Sand (Shallow),0.05,0.05,0,0,0,Sand (Shallow),0,0,0.95
+Sand Borrow Area,0,0,0,0,0,Sand Borrow Area,0,0,1
+"Sand, Algae (Continuous)",0.05,0.95,0.9,1,8,"Sand, Algae (Continuous)",0.9,0,0.05
+"Sand, Algae (Discontinuous)",0.084375,0.5,0.415625,80,80,"Sand, Algae (Discontinuous)",0.415625,0,0.5
+"Sand, Algae (Patchy)",0,0.7,0.7,0,67,"Sand, Algae (Patchy)",0.7,0,0.3
+"Sand, Algae (Sparse)",0,0.3,0.3,0,119,"Sand, Algae (Sparse)",0.3,0,0.7
+"Sand, Live Coral (Infrequent, <10%)",0.05,0.05,0,997,997,"Sand, Live Coral (Infrequent, <10%)",0,0,0.95
+"Sand, Mangrove (Discontinuous)",0.05,0.366666667,0.316666667,6,6,"Sand, Mangrove (Discontinuous)",0.316666667,0,0.633333333
+"Sand, Seagrass (Continuous)",0.05,0.95,0.9,570,851,"Sand, Seagrass (Continuous)",0,0.9,0.05
+"Sand, Seagrass (Discontinuous)",0.050305998,0.533454545,0.483148548,1634,1650,"Sand, Seagrass (Discontinuous)",0,0.483148548,0.466545455
+"Sand, Seagrass (Patchy)",0,0.7,0.7,0,402,"Sand, Seagrass (Patchy)",0,0.7,0.3
+"Sand, Seagrass (Sparse)",0,0.3,0.3,0,452,"Sand, Seagrass (Sparse)",0,0.3,0.7
+Scattered Coral/Rock in Unconsolidated Sediment,0.234210526,0.3625,0.128289474,0,0,Scattered Coral/Rock in Unconsolidated Sediment,0.128289474,0,0.6375
+"Scattered Coral/Rock in Unconsolidated Sediment, Algae (Discontinuous)",0.286842105,0.7,0.413157895,57,57,"Scattered Coral/Rock in Unconsolidated Sediment, Algae (Discontinuous)",0.413157895,0,0.3
+"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Discontinuous)",0.3,0.4,0.1,4,4,"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Discontinuous)",0.1,0,0.6
+"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Infrequent, <10%)",0.05,0.05,0,2,2,"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Infrequent, <10%)",0,0,0.95
+"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Sparse)",0.3,0.3,0,6,6,"Scattered Coral/Rock in Unconsolidated Sediment, Live Coral (Sparse)",0,0,0.7
+"Scattered Coral/Rock in Unconsolidated Sediment, No Cover",0,0,0,0,0,"Scattered Coral/Rock in Unconsolidated Sediment, No Cover",0,0,1
+Seagrass (Continuous),0.05,0.95,0.9,0,0,Seagrass (Continuous),0,0.9,0.05
+"Seagrass (Continuous), Bank",0.05,0.95,0.9,0,0,"Seagrass (Continuous), Bank",0,0.9,0.05
+Seagrass (Dense Continuous),0,1,1,0,0,Seagrass (Dense Continuous),0,1,0
+Seagrass (Dense Discontinuous),0.05,0.7,0.65,0,0,Seagrass (Dense Discontinuous),0,0.65,0.3
+Seagrass (Discontinuous),0.050305998,0.533454545,0.483148548,0,0,Seagrass (Discontinuous),0,0.483148548,0.466545455
+"Seagrass (Discontinuous), Bank",0.050305998,0.533454545,0.483148548,0,0,"Seagrass (Discontinuous), Bank",0,0.483148548,0.466545455
+Seagrass (Sparse Continuous),0,0.4,0.4,0,0,Seagrass (Sparse Continuous),0,0.4,0.6
+Seagrass (Sparse),0,0.3,0.3,0,0,Seagrass (Sparse),0,0.3,0.7
+Spur and Groove,0.226980225,0.601480677,0.374500452,0,0,Spur and Groove,0.374500452,0,0.398519323
+Spur and Groove (High Relief),0.324808392,0.605635838,0.280827446,0,0,Spur and Groove (High Relief),0.280827446,0,0.394364162
+Spur and Groove (Outer),0.226980225,0.601480677,0.374500452,0,0,Spur and Groove (Outer),0.374500452,0,0.398519323
+"Spur and Groove, Algae (Continuous)",0.05,0.95,0.9,1,1,"Spur and Groove, Algae (Continuous)",0.9,0,0.05
+"Spur and Groove, Algae (Discontinuous)",0.227710843,0.7,0.472289157,83,85,"Spur and Groove, Algae (Discontinuous)",0.472289157,0,0.3
+Tidal Flats,0,0,0,0,0,Tidal Flats,0,0,1
+Turbid Plume,0,0,0,0,0,Turbid Plume,0,0,1
+Unconsolidated Sediment,0,0,0,0,0,Unconsolidated Sediment,0,0,1
+"Unconsolidated Sediment, Algae",0,0.7,0.7,0,0,"Unconsolidated Sediment, Algae",0.7,0,0.3
+"Unconsolidated Sediment, Bank",0,0,0,0,0,"Unconsolidated Sediment, Bank",0,0,1
+Unknown,NA,NA,NA,0,0,Unknown,NA,NA,NA
