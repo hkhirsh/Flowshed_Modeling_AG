@@ -6,6 +6,22 @@
 .RData
 .RDataTmp
 
+# Data Files
+# Flowshed_Modeling_AG/DATAFILE/
+
+# Never allow shapefiles
+.dbf
+.prj
+.shx
+.shp
+
+# .nc SST data files
+/D.SST_ncU+2069/*/*
+#/D.SST_ncU+2069/Daily_CoralTemp_3.1/
+#/D.SST_ncU+2069/Daily_CWR_DHW_3.1/
+#/D.SST_ncU+2069/Daily_OISST_v2/
+/D.SST_nc/*.nc
+
 # User-specific files
 .Ruserdata
 
