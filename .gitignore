@@ -6,6 +6,8 @@
 .RData
 .RDataTmp
 
+.DS_Store
+
 # Data Files (ignore large shapefile folders)
 /Flowshed_Modeling_InputData/BowtieFractions_Jan10
 /Flowshed_Modeling_InputData/Concave_BowBenthic_14days_26april2024
@@ -15,13 +17,13 @@
 /Flowshed_Modeling_InputData/yearBows_22april2024
 
 # Never allow shapefiles
-.dbf
-.prj
-.shx
-.shp
+*.dbf
+*.prj
+*.shx
+*.shp
 
 # No .gdb files (including Florida's Unified Reef Map)
-.gdb
+*.gdb
 /Flowshed_Modeling_InputData/FWC_UnifiedFloridaReefMap_v2.0.gdb
 
 # Ignore larger .csv files (specify which ones)
