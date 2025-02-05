@@ -22,7 +22,8 @@ library(ggplot2)
 library(webshot)
 library(terra)
 library(patchwork)
-
+# Creates bibliography 
+#knitr::write_bib(c(.packages()), "packages.bib")
 
 #### Loapatchwork#### Load the stuff
 

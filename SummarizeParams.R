@@ -50,7 +50,9 @@ lapply(packageload, library, character.only = TRUE)
 
 # CCc %>% tbl_summary #simplify first to the parameters I want
 
-CCc=read.csv("/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/CC_complete_cases_26april2024.csv")
+# CCc=read.csv("/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/CC_complete_cases_26april2024.csv")
+CCc=read.csv("Flowshed_Modeling_InputData/CC_complete_cases_26april2024.csv")
+
 # unique(CCc$ndays)
 
 # unique(CCc$Sub_region)
