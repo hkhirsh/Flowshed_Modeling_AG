@@ -1,0 +1,311 @@
+rm(list = ls()) #clear environment
+
+# Review script Dec 12, 2024 (what is loaded and written)
+
+#not finding file to check packages
+
+## Clear Workspace ---------------------------------------------------------
+rm(list=ls())
+
+## Load Libraries ----------------------------------------------------------
+packageload <- c('tidyverse','patchwork','MuMIn','PNWColors','ghibli','ggtext','ggfx','RColorBrewer')
+lapply(packageload, library, character.only = TRUE)
+
+# ----Check which packages we actually use----
+# Find which packages do used functions belong to ----
+used.functions <- NCmisc::list.functions.in.file(filename = "/Users/heidi.k.hirsh/Documents/GitHub/Flowshed_Modeling/Model_Pipeline_2024/VariablePlots.R", alphabetic = FALSE) |> print()
+# Find which loaded packages are not used ----
+used.packages <- used.functions |> names() |> grep(pattern = "package:", value = TRUE) |> gsub(pattern = "package:", replacement = "") |> print()
+unused.packages <- packageload[!(packageload %in% used.packages)] |> print()
+----------------------------
+
+
+## Necessary Function(s)
+traintest=function(mod,train_p=.8,rep=F,nruns=100,metric="adj.r.squared"){
+  if(mod$call[[2]]=="RY ~ 1"){
+    rsqtt=summary(mod)[metric]
+  }else{
+    modData=mod$model
+    dataN=nrow(modData)
+    trainN=floor(dataN*train_p)
+    rsqtt=rep(NA,nruns)
+    for(i in 1:nruns){
+      trainset=sample(x = 1:dataN,size = trainN,replace = rep)
+      testset=setdiff(1:dataN,trainset)
+      trainData=modData[trainset,]
+      testData=modData[testset,]
+      ttmod_call=mod$call
+      ttmod_call[[3]]=trainData
+      ttmod=eval(ttmod_call)
+      sttmod=summary(ttmod)
+      ptt=predict(ttmod,newdata=testData)
+      opmod=lm(testData$RY~ptt)
+      sopmod=summary(opmod)
+      rsqtt[i]=unlist(sopmod[metric])
+    }
+  }
+  return(rsqtt)
+}
+
+se = function(x,na.rm=T){return(sd(x,na.rm=na.rm)/sqrt(length(x)))}
+
+## Load data
+CCorig=read.csv("/Users/heidi.k.hirsh/Documents/FLK_Model1/CC_dataframes/CC_complete_cases_26april2024.csv") #This is written in 'p3_14days_CCmodel_OSM2024.R
+
+# CCorig=read.csv("C:/Users/Thomas.Oliver/Downloads/drive-download-20241009T005734Z-001/CC_complete_cases_26april2024.csv") #This is written in 'p3_14days_CCmodel_OSM2024.R
+# table(CCc$ndays) #all have 984 samples (originally 1376)
+# table(CCc$Sub_region)
+# table(CCc$Zone)/14
+# 
+# CCc_sub = subset(CCc, Zone %in% c("Inshore","Mid channel") & ndays==5)
+# CCc_reef = subset(CCorig, Zone %in% c("Inshore","Mid channel"))
+# CCc_deep = subset(CCorig, Zone %in% c("Offshore","Oceanic"))
+CCc_notOcean = subset(CCorig, Zone %in% c("Inshore","Mid channel","Offshore"))
+
+#uncomment to rerun model.
+# CCc=CCc_reef
+CCc=NULL
+CCc=CCc_notOcean
+# table(CCc_deep$Zone)/14
+table(CCc_notOcean$Zone)/14
+dim(CCc_notOcean) #12054   122
+dim(subset(CCc_notOcean, ndays==1)) #861 122
+unique(CCc_notOcean$simu)
+
+#define daily (DV), monthly (MV) and hourly (HV) time and volume interactions with the benthos
+#capture "modeled metabolic contribution"
+CCc$CosHr=cos(2*pi*CCc$hrod.lst/24)
+CCc$SinHr=sin(2*pi*CCc$hrod.lst/24)
+CCc$CosMOY=cos(2*pi*CCc$MoY/12)
+CCc$SinMOY=sin(2*pi*CCc$MoY/12)
+CCc=CCc %>% mutate(
+  CALC_DV=CALC_m2*ndays*inverseVol,  #
+  CALC_cHV=CALC_m2*CosHr*inverseVol,
+  CALC_sHV=CALC_m2*SinHr*inverseVol,
+  CALC_cMV=CALC_m2*CosMOY*inverseVol,
+  CALC_sMV=CALC_m2*SinMOY*inverseVol,
+  ALGi_DV=ALGi_m2*ndays*inverseVol,  #
+  ALGi_cHV=ALGi_m2*CosHr*inverseVol,
+  ALGi_sHV=ALGi_m2*SinHr*inverseVol,
+  ALGi_cMV=ALGi_m2*CosMOY*inverseVol,
+  ALGi_sMV=ALGi_m2*SinMOY*inverseVol,
+  SGi_DV=SGi_m2*ndays*inverseVol,  #
+  SGi_cHV=SGi_m2*CosHr*inverseVol,
+  SGi_sHV=SGi_m2*SinHr*inverseVol,
+  SGi_cMV=SGi_m2*CosMOY*inverseVol,
+  SGi_sMV=SGi_m2*SinMOY*inverseVol
+)
+
+Resids=NULL
+ResidAdd=NULL
+ModAdd = NULL
+ModCol = NULL
+
+RYs = c("DIC_umol_kg", "TA_umol_kg") #response variables
+RTs = unique(CCc$ndays) #1-14
+ZNs = unique(CCc$Zone) #"Inshore" "Mid channel" "Offshore" "Oceanic"
+SRs = unique(CCc$Sub_region)  #"BB" "UK" "MK" "LK"
+
+#also need to loop through OCE refs (TA or DIC) and fraction refs (endmember chemistry)
+OCs = c("DICoce_mean", "TAoce_mean")
+RNs = c("DICrefN", "TArefN")
+
+#Calculate DIC/TA Admixed
+CCc=CCc %>% mutate(DICadmix=(1-FBfraction) * DICoce_mean + FBfraction * DICrefN,
+                   TAadmix=(1-FBfraction) * TAoce_mean + FBfraction * TArefN)
+CCc$Sub_region = factor(CCc$Sub_region, levels = c("BB","UK","MK","LK"))
+
+# The palette with grey:
+# cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+#           "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# 
+# # The palette with black:
+# cbp2 <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
+#           "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# 
+# t=display.brewer.all(colorblindFriendly = TRUE)
+
+DIC.ad.plot=CCc %>% filter(
+  Zone=="Inshore",
+  ndays=="5") %>% 
+  group_by(Sub_region,jday,Year) %>% 
+  summarize(
+    FBfraction.mn=mean(FBfraction),
+    DICad.mn=mean(DICadmix,na.rm=T),
+    DICad.se=se(DICadmix,na.rm=T),
+    TAad.mn=mean(TAadmix,na.rm=T),
+    TAad.se=se(TAadmix,na.rm=T)
+  ) %>% 
+  ggplot(aes(x=jday,y=DICad.mn,
+             ymin=DICad.mn-DICad.se,
+             ymax=DICad.mn+DICad.se))+
+  geom_point(aes(fill=FBfraction.mn,size=FBfraction.mn),color="black",shape=21)+
+  geom_line(aes(group=Year,color=factor(Year)))+
+  # scale_color_brewer('Year',palette = "Dark2")+
+  geom_errorbar()+
+  scale_fill_continuous(type="viridis")+
+  facet_grid(Sub_region~.)+theme_bw()+xlab("Julian Day")+ylab("Admixed DIC (umol/kg)")+
+  labs(size="Northern Endmember Fraction",fill="Northern Endmember Fraction",color="Year")+
+  theme(legend.position = "bottom",
+        legend.box = "vertical")#+
+# theme(legend.position = "none")
+  # guides(shape=guide_legend(order=1), color=guide_legend(order=3)) #doesn't do what I want but at least fraction legends are together
+DIC.ad.plot
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/suppPlots/DICvariability_",Sys.time(),".png"),plot=DIC.ad.plot,dpi = 300) #,width =15, height = 8, dpi = 300)
+
+
+
+TA.ad.plot=CCc %>% filter(
+  Zone=="Inshore",
+  ndays=="5") %>% 
+  group_by(Sub_region,jday,Year) %>% 
+  summarize(
+    FBfraction.mn=mean(FBfraction),
+    DICad.mn=mean(DICadmix,na.rm=T),
+    DICad.se=se(DICadmix,na.rm=T),
+    TAad.mn=mean(TAadmix,na.rm=T),
+    TAad.se=se(TAadmix,na.rm=T)
+  ) %>% 
+  ggplot(aes(x=jday,y=TAad.mn,
+             ymin=TAad.mn-TAad.se,
+             ymax=TAad.mn+TAad.se))+
+  geom_point(aes(fill=FBfraction.mn,size=FBfraction.mn),color="black",shape=21)+
+  geom_line(aes(group=Year,color=factor(Year)))+
+  geom_errorbar()+
+  scale_fill_continuous(type="viridis")+
+  labs(size="Northern Endmember Fraction",fill="Northern Endmember Fraction",color="Year")+
+  facet_grid(Sub_region~.)+theme_bw()+xlab("Julian Day")+ylab("Admixed TA (umol/kg)")+
+  theme(legend.position = "bottom",
+        legend.box = "vertical")
+  # theme(legend.position = "none")
+
+TA.ad.plot
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/suppPlots/TAvariability_",Sys.time(),".png"),plot=TA.ad.plot,dpi = 300) #,width =15, height = 8, dpi = 300)
+
+# combo=DIC.ad.plot+TA.ad.plot
+# combo
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/suppPlots/DICandTAvariability_",Sys.time(),".png"),width =15, height = 8,plot=combo,dpi = 300) #,width =15, height = 8, dpi = 300)
+
+
+VOL.plot=CCc %>% filter(
+  Zone=="Inshore",
+  ndays=="5") %>% 
+  group_by(Sub_region,jday,Year) %>% 
+  summarize(
+    Vol.mn=mean(vol_km3,na.rm=T),
+    Vol.se=se(vol_km3,na.rm=T)
+  ) %>% 
+  ggplot(aes(x=jday,y=Vol.mn,
+             ymin=Vol.mn-Vol.se,
+             ymax=Vol.mn+Vol.se))+
+  geom_point(aes(),color='black',shape=21)+
+  geom_line(aes(group=Year,color=factor(Year)))+
+  geom_errorbar()+
+  labs(color="Year")+
+  scale_y_log10()+# scale_fill_continuous(type="viridis")+
+  facet_grid(Sub_region~.)+theme_bw()+xlab("Julian Day")+ylab("Flowshed Volume (km3)")+
+  theme(legend.position = "bottom",
+        legend.box = "vertical")
+VOL.plot
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/suppPlots/VOLvariability_",Sys.time(),".png"),plot=VOL.plot,dpi = 300) #,width =15, height = 8, dpi = 300)
+
+
+#benthic colors
+
+myColors = c('coral1','palegreen3','steelblue1')
+
+# model_shapes      <-c(16,4,21,3,22,24,25,23)
+ben_FILL_scale  <- scale_fill_manual(name = "Benthic Habitat Class", values = myColors,
+                                         breaks = c('CALC.mn','SGi.mn','ALGi.mn'),
+                                         labels = c('Calcifiers','Seagrass','Non-calcifying Algae'))
+
+BENcc = CCc %>% filter(
+    Zone=="Inshore",
+    ndays=="5",
+    Year==2019) %>% 
+  group_by(Sub_region,MY,Year) %>% 
+  summarize(
+    CALC.mn=mean(CALC_m2,na.rm=T),
+    SGi.mn=mean(SGi_m2,na.rm=T),
+    ALGi.mn=mean(ALGi_m2,na.rm=T),
+  ) %>% 
+  pivot_longer(cols=c(CALC.mn,SGi.mn,ALGi.mn),names_to ='BEN',values_to = "Area.m2")
+
+BENcc$BEN = factor(BENcc$BEN , levels = c("SGi.mn","ALGi.mn","CALC.mn"))
+# BENcc$BEN = factor(BENcc$BEN , levels = c("CALC.mn","SGi.mn","ALGi.mn"))
+# head(BENcc)
+
+BEN.plot = BENcc %>% 
+ggplot(aes(x=MY,y=Area.m2,fill=BEN))+
+    geom_col(position="stack")+
+    ben_FILL_scale  +
+    facet_grid(Sub_region~.)+theme_bw()+xlab("Julian Day")+ylab("Benthic Index (m2)")+
+    labs(fill="Benthic Class")+
+    theme(legend.position = "bottom",
+          legend.box = "vertical")
+
+BEN.plot
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/suppPlots/BENvariability_",Sys.time(),".png"),plot=BEN.plot,dpi = 300) #,width =15, height = 8, dpi = 300)
+
+# BEN.plot=CCc %>% filter(
+#   Zone=="Inshore",
+#   ndays=="5",
+#   Year==2019) %>% 
+#   group_by(Sub_region,MY,Year) %>% 
+#   summarize(
+#     CALC.mn=mean(CALC_m2,na.rm=T),
+#     SGi.mn=mean(SGi_m2,na.rm=T),
+#     ALGi.mn=mean(ALGi_m2,na.rm=T),
+#   ) %>% 
+#   pivot_longer(cols=c(CALC.mn,SGi.mn,ALGi.mn),names_to ='BEN',values_to = "Area.m2") %>% 
+#   # pivot_longer(cols=c(CALC.mn,SGi.mn,ALGi.mn),names_to ='BEN',values_to = "Area.m2") %>% 
+#   ggplot(aes(x=MY,y=Area.m2,fill=BEN))+
+#   geom_col(position="stack")+
+#   ben_Color_scale+
+#   facet_grid(Sub_region~.)+theme_bw()+xlab("Julian Day")+ylab("Benthic Index (m2)")+
+#   labs(fill="Benthic Class")+
+#   theme(legend.position = "bottom",
+#         legend.box = "vertical")
+
+
+
+# # RYi = 1;RTi = 1;OCi = 1;RNi = 1
+# m0.7 = lm(
+#   RY ~
+#     # CALC_m2 +
+#     # ALGi_m2 +
+#     # SGi_m2 +
+#     # inverseVol +
+#     (1-FBfraction) * OC +
+#     FBfraction * RN +
+#     # CosHr +
+#     # SinHr +
+#     # CosMOY +
+#     # SinMOY +
+#     PAR_MODIS_MON +
+#     Salinity_Bottle +
+#     Temperature_C +
+#     Chla +
+#     NO3+
+#     CALC_DV +
+#     CALC_cHV +
+#     CALC_sHV +
+#     CALC_cMV +
+#     CALC_sMV +
+#     ALGi_DV +
+#     ALGi_cHV +
+#     ALGi_sHV +
+#     ALGi_cMV +
+#     ALGi_sMV +
+#     SGi_DV +
+#     SGi_cHV +
+#     SGi_sHV +
+#     SGi_cMV +
+#     SGi_sMV +
+#     Year +
+#     Sub_region,
+#   data = CCm
+# )
+names(CCc)
+CCc %>% filter()
+

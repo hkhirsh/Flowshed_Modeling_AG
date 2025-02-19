@@ -1,31 +1,24 @@
-## Build CC dataframe including bows 
-#12/19 cleanup and check 
-# 1/2/2025 further streamline and document in Whimsical
+##This script combines pairs flowshed spatial data with the point data dataframe. This allows us to add benthic data to the modeling dataframe. 
+##Relevant endmember data (based on relative water mass history north or south of the Keys) is also incorporated here. 
 
+##Heidi K. Hirsh
+##Last edit: Feb 19, 2025
 
 ## Clear Workspace ---------------------------------------------------------
 rm(list=ls())
 
 ## Load Libraries ----------------------------------------------------------
 packageload <- c('ggplot2','mapview','sf')
-
 # packageload <- c('magick','ggplot2','tidyverse','ggrepel','rstudioapi','stringr','sp','raster','patchwork','mapview','rerddap','leaflet','streamMetabolizer','sf')
-
 lapply(packageload, library, character.only = TRUE)
-sf_use_s2(FALSE) #nutrient point overlap with polygons will not work without this line!
 
-# # ----Check which packages we actually use----
-# # Find which packages do used functions belong to ----
-# used.functions <- NCmisc::list.functions.in.file(filename = "/Users/heidi.k.hirsh/Documents/GitHub/Flowshed_Modeling/Model_Pipeline_2024/p2_14days_BuildCCbows_streamlined.R", alphabetic = FALSE) |> print()
-# # Find which loaded packages are not used ----
-# used.packages <- used.functions |> names() |> grep(pattern = "package:", value = TRUE) |> gsub(pattern = "package:", replacement = "") |> print()
-# unused.packages <- packageload[!(packageload %in% used.packages)] |> print()
+sf_use_s2(FALSE) #nutrient point overlap with polygons will not work without this line!
 
 ## LOAD files
 
 ## Load modeling dataframe built in P1 ----------------------------------------------------------
 #note, this dataframe will be read in as "CC" (again) for coding simplicity
-CC <- read.csv(file='/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/CCnutsparbath_9feb2024.csv')
+CC <- read.csv(file='Flowshed_Modeling_InputData/CCnutsparbath_9feb2024.csv')
 dim(CC) #1612   83
 names(CC)
 unique(CC$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022 (we will not use 2010,2011,2022)
@@ -35,13 +28,13 @@ unique(CC$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022 (we
 #I think?
 ##__________pair with fractions (add CCbbb to fractions df so we have all 14 days)
 #load fractions (proportional time)
-ptime  <- st_read('/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/BowtieFractions_Jan10/BowtieFractions_Jan10.shp')
+ptime  <- st_read('Flowshed_Modeling_InputData/BowtieFractions_Jan10/BowtieFractions_Jan10.shp')
 # dim(ptime) #38500     6
 # dim(ptime)/28 #(14 forward and back) #1375
 
 
 ## Read in BBB (benthic bowties)
-BBB = st_read('/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/Concave_BowBenthic_14days_26april2024/Concave_BowBenthic_14days_26april2024.shp')
+BBB = st_read('Flowshed_Modeling_InputData/Concave_BowBenthic_14days_26april2024/Concave_BowBenthic_14days_26april2024.shp')
 
 
 ## Load points on west florida shelf
