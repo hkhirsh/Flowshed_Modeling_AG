@@ -5,9 +5,11 @@
 # Session Data files
 .RData
 .RDataTmp
+*RDataTmp*
 
 .DS_Store
 *.DS_Store
+*DS_Store*
 
 # Data Files (ignore large shapefile folders)
 /Flowshed_Modeling_InputData/BowtieFractions_Jan10
