@@ -20,7 +20,7 @@
 /Flowshed_Modeling_InputData/yearBows_22april2024
 
 # Ignore Figure writing folder
-/Flowshed_Modeling_figures/*
+/Flowshed_Modeling_figures
 
 # Never allow shapefiles
 *.dbf
