@@ -1,3 +1,12 @@
+## did not save changes: 
+#add points
+#change title
+#change file structure to save by region
+#loop through years (no regions) 
+#to do this we need to redefine the next loop
+
+
+
 rm(list=ls())
 library(PNWColors)
 library(colorspace)
@@ -175,17 +184,18 @@ raster_template <- rast(ext(plotData_t), resolution = 0.01, crs = crs(plotData_t
 values(raster_template) <- 0  # Initialize with zeros
 
 
-# for (y_i in 1:length(Yrs)) {
-#   timeYear=Yrs[y_i]
-#   ploThis1 = subset(plotData_t,Year==timeYear)
-timeYear="allYears"  
+for (y_i in 1:length(Yrs)) {
+  timeYear=Yrs[y_i]
+  ploThis1 = subset(plotData_t,Year==timeYear)
+# timeYear="allYears"  
 
-  for (s_i in 1:length(Seas)) {
-    timeSeason=Seas[s_i]
-    print(paste0("Start season ",s_i," of ",length(Seas)))
-    # ploThis2 = subset(ploThis1,Season==timeSeason)
-    ploThis2 = subset(plotData_t,Season==timeSeason)
+  # for (s_i in 1:length(Seas)) {
+  #   timeSeason=Seas[s_i]
+  #   print(paste0("Start season ",s_i," of ",length(Seas)))
+  #   # ploThis2 = subset(ploThis1,Season==timeSeason)
+  #   ploThis2 = subset(plotData_t,Season==timeSeason)
     
+  timeSeason='allSeasons'
     # unique(ploThis2$Year)
     
           
@@ -217,7 +227,6 @@ timeYear="allYears"
     geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.3)+                 #Plot all stations
     geom_point(data=plotShelf,aes(x=Longitude_Dec_Deg,y=Latitude_Dec_Deg),color="black",size=.3)+  #add West Florida Shelf points
     geom_point(data=ploThis,aes(x=dec.lon,y=dec.lat,fill=SiteID),color='black',pch=21,size=1.5,stroke=1)+  #plot points associated with flowsheds in plot
-
     # site_COLOR_scale+
     site_FILL_scale+
     # facet_wrap(~Year,nrow=4)+
@@ -233,7 +242,7 @@ timeYear="allYears"
           panel.grid.minor = element_blank())
   plotFlowshed
   # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYears/polygons/Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,".png"),plot=plotFlowshed,width=10, height=10, dpi = 300)
-  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYearsbySite/polygons/Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=plotFlowshed,width=10, height=10, dpi = 300)
+  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/OverlapFrequency/allYearsbySite/polygons/Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=plotFlowshed,width=10, height=10, dpi = 300)
   
 
   
@@ -265,7 +274,6 @@ timeYear="allYears"
     scale_fill_viridis_c(option = "magma") +  # Adjust color scale
     geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.3)+                 #Plot all stations
     geom_point(data=plotShelf,aes(x=Longitude_Dec_Deg,y=Latitude_Dec_Deg),color="black",size=.3)+  #add West Florida Shelf points
-    geom_point(data=ploThis,aes(x=dec.lon,y=dec.lat),color='black',pch=21,size=1.5,stroke=1)+  #plot points associated with flowsheds in plot
     coord_sf(xlim = c(-82.7, -80.0198748985922), ylim = c(24, 26.0703716407435), expand = FALSE) + #for backward halos
     # theme_minimal() +
     theme_bw() +
@@ -276,13 +284,15 @@ timeYear="allYears"
          # title = "Polygon Overlap Frequency",
          fill = "Overlap Count")
   RR
-  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYearsbySite/rasters/OverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=RR,width=10, height=10, dpi = 300)
+  # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYearsbySite/rasters/OverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=RR,width=10, height=10, dpi = 300)
+  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/OverlapFrequency/allYearsbySite/rasters/OverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=RR,width=10, height=10, dpi = 300)
   
 
   combo=plotFlowshed/RR
   combo
-  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYearsbySite/combos/COMBOOverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=combo,width=10, height=10, dpi = 300)
- 
+  # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/OverlapFrequency/allYearsbySite/combos/COMBOOverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=combo,width=10, height=10, dpi = 300)
+  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/OverlapFrequency/allYearsbySite/combos/COMBOOverlapRaster_Inshore_Backward_",nn,"day_",timeYear,"_",timeSeason,"_",place,"(",flowshedNum,"bows).png"),plot=combo,width=10, height=10, dpi = 300)
+  
   } #end part to run if there is data for raster
   else {
   } #end alternative (don't plot)
@@ -331,7 +341,8 @@ timeYear="allYears"
   
 p_i = NULL
 # p_i = 6
-nn=14
+nn=5
+# nn=14
 
   # for (p_i in 1:length(sites)) {
   #   place=sites[p_i]
@@ -536,3 +547,12 @@ place = 16
 # 
 # # } #End season loop
 
+      
+      ##animate: 
+      #Backward
+      list.files(path='/Users/heidi.k.hirsh/Desktop/Halo_backward14_Lim', pattern = '*.png', full.names = TRUE) %>% 
+        mixedsort() %>%
+        image_read() %>% # reads each path file
+        image_join() %>% # joins image
+        image_animate(fps=2) %>% # animates, can opt for number of loops
+        image_write("/Users/heidi.k.hirsh/Desktop/HaloBackward14.gif") # write to current dir

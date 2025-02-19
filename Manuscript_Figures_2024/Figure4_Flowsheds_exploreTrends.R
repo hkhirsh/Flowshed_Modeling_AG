@@ -105,9 +105,10 @@ D=300
 # # save(concave.bo, file = "/Users/heidi.k.hirsh/Desktop/SaveBufferedBows/AllBackward_concave_bo.RData")
 load("/Users/heidi.k.hirsh/Desktop/SaveBufferedBows/AllBackward_concave_bo.RData")
 
-concave.bi = st_buffer(concave.bo, dist=-D, nQuadSegs=30)
-dim(concave.bi)
-save(concave.bi, file = "/Users/heidi.k.hirsh/Desktop/SaveBufferedBows/AllBackward_concave_bi.RData")
+# concave.bi = st_buffer(concave.bo, dist=-D, nQuadSegs=30)
+# dim(concave.bi)
+# save(concave.bi, file = "/Users/heidi.k.hirsh/Desktop/SaveBufferedBows/AllBackward_concave_bi.RData")
+# load("/Users/heidi.k.hirsh/Desktop/SaveBufferedBows/inshoreAllYrs_concave_bi.RData")
 
 
 # ###__________save inshore backward bows for every year_________
@@ -142,6 +143,8 @@ plotData_t = st_transform(plotData,crs='+proj=longlat +datum=WGS84')
 unique(plotData$SiteID)
 plotData_t$Season = factor(plotData$Season, levels = c("Winter","Spring","Summer","Fall"))
 levels(plotData_t$Season)
+
+head(plotData_t)
 # ###____________________________________________________________
 # 
 # CCbows=NULL  
@@ -221,7 +224,7 @@ PTSsub5=subset(PTSsub,bathymetry>5) #only use points where depth is greater than
 plotShelfa = subset(PTSsub5,Year_UTC==2018) #don't need duplicate points, and 2018 has all 6
 unique(plotShelfa$Year_UTC)
 plotShelf = subset(plotShelfa,Month_UTC==5)
-# mapview(plotShelf)
+mapview(plotShelf)
 
 
 # unique(plotData_t$simu) #only backward? 
@@ -286,6 +289,8 @@ plotShelf = subset(plotShelfa,Month_UTC==5)
 # plotData_t$Season = factor(plotData$Season, levels = c("Winter","Spring","Summer","Fall"))
 sites=unique(plotData_t$SiteID)
 length(sites)
+plotData_t$Sub_region = factor(plotData$Sub_region, levels = c("BB","UK","MK","LK"))
+
 
 Yrs = unique(plotData_t$Year)
 Yrs
@@ -294,6 +299,10 @@ Seas
 # Dur=unique(plotData_t$n_days)
 # Dur
 
+# y_i = 1
+# s_i = 1
+# d_i = 1
+
 y_i = NULL
 s_i = NULL
 d_i = NULL
@@ -301,7 +310,7 @@ ploThis = NULL
 ploThis1 = NULL
 ploThis2 = NULL
 
-# nn=5
+nn=5
 
 for (y_i in 1:length(Yrs)) {
   timeYear=Yrs[y_i]
@@ -312,29 +321,71 @@ for (y_i in 1:length(Yrs)) {
     ploThis2 = subset(ploThis1,Season==timeSeason)
 
 ploThis= ploThis2    
+
+if(nrow(ploThis)>0) {
     
 AA = ggplot(FLKs1)+
   geom_sf(fill = "darkgray", lwd = 0)+                                            #Florida shoreline
-  geom_sf(data=subset(ploThis,n_days==nn),aes(color=SiteID,fill=SiteID),inherit.aes = FALSE,alpha=0.05)+
-  site_COLOR_scale+site_FILL_scale+                                               #Color points by unique site ID
-  geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.3)+         #Plot all stations
-  geom_point(data=plotShelf,aes(x=Longitude_Dec_Deg,y=Latitude_Dec_Deg),color="black",size=.3)+  #add West Florida Shelf points
-  geom_point(data=ploThis,aes(x=dec.lon,y=dec.lat,fill=SiteID),color='black',pch=21,size=1.5,stroke=1)+  #plot points associated with flowsheds in plot
+  
+  # geom_sf(data=subset(ploThis,n_days==nn),aes(color=SiteID,fill=SiteID),inherit.aes = FALSE,alpha=0.1,lwd=.6)+
+  # # geom_sf(data=subset(ploThis,n_days==nn),aes(color=SiteID,fill=SiteID),inherit.aes = FALSE,alpha=0.1,size=1.4)+
+  # site_COLOR_scale+site_FILL_scale+                                               #Color points by unique site ID
+  
+  #color by region instead
+  geom_sf(data=subset(ploThis,n_days==nn),aes(color=Sub_region,fill=Sub_region),inherit.aes = FALSE,alpha=0.1,lwd=.6)+
+  # geom_sf(data=subset(ploThis,n_days==nn),aes(color=SiteID,fill=SiteID),inherit.aes = FALSE,alpha=0.1,size=1.4)+
+  # site_COLOR_scale+site_FILL_scale+                                               #Color points by unique site ID
+  
+  
+  geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.7)+         #Plot all stations
+  geom_point(data=plotShelf,aes(x=Longitude_Dec_Deg,y=Latitude_Dec_Deg),color="black",size=.7)+  #add West Florida Shelf points
+  geom_point(data=ploThis,aes(x=dec.lon,y=dec.lat,fill=Sub_region),color='black',pch=21,size=1.5,stroke=1)+  #plot points associated with flowsheds in plot
+  # geom_point(data=ploThis,aes(x=dec.lon,y=dec.lat,fill=SiteID),color='black',pch=21,size=1.5,stroke=1)+  #plot points associated with flowsheds in plot
+  
   ylab('Latitude')+ xlab('Longitude')+
-  coord_sf(xlim = c(-82.7, -80), ylim = c(24, 26), expand = FALSE) + #for backward halos
-  ggtitle("July 2019")+
-  ggtitle(paste0(timeYear," ",timeSeason," backward trajectories (",nn,"-day)"))+
+  # coord_sf(xlim = c(-82.7, -80), ylim = c(24, 26), expand = FALSE) + #for backward halos
+  coord_sf(xlim = c(-82.5, -80), ylim = c(24.3, 26), expand = FALSE) + #for backward halos
+  
+  # ggtitle("July 2019")+
+  ggtitle(paste0(timeYear," ",timeSeason," (",nn,"-day)"))+
+  # ggtitle(paste0(timeYear," ",timeSeason," backward trajectories (",nn,"-day)"))+
   theme_bw()+
   theme(axis.line = element_line(color='black'),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())#+
 # theme(plot.margin = unit(c(0, 0, 0, 5), "cm"))+
 # theme(legend.position="none")
-AA
+# AA
+ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_",nn,"d_byRegion_v2/",timeYear,"_",timeSeason,"_Inshore",nn,"day.png"),plot=AA,width=10, height=10, dpi = 300)
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_",nn,"d_v2/",timeYear,"_",timeSeason,"_Inshore",nn,"day.png"),plot=AA,width=10, height=10, dpi = 300)
 # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/Inshore_",nn,"d/",timeYear,"_",timeSeason,"_Inshore",nn,"day.png"),plot=AA,width=10, height=10, dpi = 300)
+
+
+
+} #end part to run if there is data for raster
+else {
+} #end alternative (don't plot)
+
   }
 }
 
+print("done")
+
+
+#year season gif
+list.files(path='/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_5d_v2', pattern = '*.png', full.names = TRUE) %>%
+  mixedsort() %>%
+  image_read() %>% # reads each path file
+  image_join() %>% # joins image
+  image_animate(fps=1) %>% # animates, can opt for number of loops
+  image_write("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_Year_Season_v2.gif")
+
+list.files(path='/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_5d_byRegion_v2', pattern = '*.png', full.names = TRUE) %>%
+  mixedsort() %>%
+  image_read() %>% # reads each path file
+  image_join() %>% # joins image
+  image_animate(fps=1) %>% # animates, can opt for number of loops
+  image_write("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/Inshore_Year_Season_byRegion.gif")
 
 
 # ###_____________________ Plot 1, 7, 14 days together now (like manuscript)
@@ -392,7 +443,7 @@ ploThis1 = NULL
 ploThis2 = NULL
 
 y_i=5
-nn=7
+nn=5
 
 for (y_i in 1:length(Yrs)) {
   timeYear=Yrs[y_i]
@@ -439,15 +490,17 @@ for (y_i in 1:length(Yrs)) {
           panel.grid.minor = element_blank())#+
   # theme(plot.margin = unit(c(0, 0, 0, 5), "cm"))+
   # theme(legend.position="none")
-  BB
+  # BB
   # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/SeasonFacet_7d_inshore2/",timeYear,"_Inshore",nn,"day_season.png"),plot=BB,width=10, height=10, dpi = 300)
-}
+  ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FRESCAplotFRENZY/SeasonFacet_7d_inshore2/",timeYear,"_Inshore",nn,"day_season.png"),plot=BB,width=10, height=10, dpi = 300)
+  
+  }
 
 
 #####__________Try faceting by both year and season (no loop needed)
 
 ploThis = NULL
-nn=7
+nn=5
 
 # # ploThis = subset(plotData_t,n_days==nn)
 # ploThisA = subset(plotData_t,n_days==nn & Year %in% c(2012,2014,2015))
@@ -476,7 +529,8 @@ aa = ggplot(ploThis)+
     theme(axis.line = element_line(color='black'),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank())
-ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/FacetSeasonYear/Inshore",nn,"day_SeasonYrFacet_allYears_1of3.png"),plot=aa,width=10, height=10, dpi = 300)
+aa
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/FlowshedAnalysis/FacetSeasonYear/Inshore",nn,"day_SeasonYrFacet_allYears_1of3.png"),plot=aa,width=10, height=10, dpi = 300)
 
 #makes more sense to facet 3 years at a time. 
 ploThis=NULL

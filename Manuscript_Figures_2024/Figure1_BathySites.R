@@ -169,6 +169,9 @@ slim = ggplot() +
   # scale_fill_cmocean(name="deep",breaks=bath.breaks, labels=bath.labs)+
   # scale_fill_cmocean(name="haline",direction=-1,breaks=bath.breaks, labels=bath.labs)+
   scale_fill_hypso_c(palette="etopo1_bathy",direction=-1,breaks=bath.breaks, labels=bath.labs)+
+  ##getting warning for guies code:
+#   `guide_colourbar()` cannot be used for fill_ggnewscale_1.
+# ℹ Use one of colour, color, or fill instead. 
   guides(fill=guide_colourbar(title='Depth (m)',reverse=T,draw.ulim=FALSE, draw.llim = FALSE))+
   annotation_scale(location = "tl", width_hint = 0.2,height=unit(.3,'cm'),text_cex=1.1, pad_x=unit(0.5, "cm"), pad_y=unit(0.5, "cm")) +
   annotation_north_arrow(location = "tl", which_north = "true", height = unit(1.2, "cm"),width = unit(1.0, "cm"),
@@ -186,6 +189,10 @@ slim = ggplot() +
 slim
 
 TS=Sys.time()
-ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/Fig1.logBathy_",TS,".png"),plot=slim,width = 10, height = 8, dpi = 300)
+# ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/Fig1.logBathy_",TS,".png"),plot=slim,width = 10, height = 8, dpi = 300)
 
 # ggsave(filename=paste0("/Users/heidi.k.hirsh/Desktop/Figure1/Fig1.logBathy_",TS,".png"),plot=slim,width = 10, height = 8, dpi = 300)
+
+
+
+### new version including FLB sampling points (for next steps in FRESCA talk)

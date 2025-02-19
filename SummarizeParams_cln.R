@@ -11,7 +11,7 @@ lapply(packageload, library, character.only = TRUE)
 
 # ----Check which packages we actually use----
 # Find which packages do used functions belong to ----
-used.functions <- NCmisc::list.functions.in.file(filename = "/Users/heidi.k.hirsh/Documents/GitHub/Flowshed_Modeling/SummarizeParams_cln.R", alphabetic = FALSE) |> print()
+used.functions <- NCmisc::list.functions.in.file(filename = "/Users/heidi.k.hirsh/Documents/GitHub/Flowshed_Modeling_AG/SummarizeParams_cln.R", alphabetic = FALSE) |> print()
 
 # Find which loaded packages are not used ----
 used.packages <- used.functions |> names() |> grep(pattern = "package:", value = TRUE) |> gsub(pattern = "package:", replacement = "") |> print()
@@ -38,11 +38,15 @@ CClim2 =
   dplyr::rename(Region=Sub_region,PAR=PAR_MODIS_MON, TA=TA_umol_kg, DIC=DIC_umol_kg,Chlorophyll=Chla, 
                 Nitrate=NO3,Temperature=Temperature_C,Salinity=Salinity_Bottle,Depth=pointDepth)
 head(CClim2)
+dim(CClim2)
 
 ##don't include oceanic
 CClim3 = subset(CClim2, Zone != "Oceanic")
 table(CClim3$Zone)
+dim(CClim3)
 
+table(CClim2$Region,CClim2$Zone)
+table(CClim3$Region,CClim3$Zone)
 ##_______Summarize all data together (no zone or region %; separate columns for stats)
 #report range and mean (sd) 
 
@@ -69,7 +73,7 @@ library(webshot2)
 
 TableAllcols %>% as_gt() %>%
 # gt::gtsave(filename='/Users/heidi.k.hirsh/Desktop/SummarizeAll_range_meansd.docx')
-gt::gtsave(filename='/Users/heidi.k.hirsh/Desktop/SummarizeAll_range_meansd.png')
+gt::gtsave(filename='/Users/heidi.k.hirsh/Desktop/SummarizeAll_range_meansd_noOce.docx')
 
 ##_______Summarize all data together (no zone or region %; rows for stats)
 
