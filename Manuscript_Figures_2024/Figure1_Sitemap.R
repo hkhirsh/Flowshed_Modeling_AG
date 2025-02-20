@@ -141,7 +141,7 @@ slim = ggplot() +
 
 
 slim
-ggsave(filename="Flowshed_Modeling_Figures/Figure1_i.png",plot=slim,width = 10, height = 8, dpi = 300)
+# ggsave(filename="Flowshed_Modeling_Figures/Figure1_i.png",plot=slim,width = 10, height = 8, dpi = 300)
 
 
 
