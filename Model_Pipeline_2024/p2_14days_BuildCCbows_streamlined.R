@@ -1,8 +1,9 @@
 ##This script combines pairs flowshed spatial data with the point data dataframe. This allows us to add benthic data to the modeling dataframe. 
 ##Relevant endmember data (based on relative water mass history north or south of the Keys) is also incorporated here. 
+##Run this script AFTER running 'buildStationDF.R' (for sampling station dataframe, CC below) and 'benthicOverlap_saveFlowsheds.R' for corresponding benthic data (from flowsheds)
 
 ##Heidi K. Hirsh
-##Last edit: Feb 19, 2025
+##Last edit: Feb 20, 2025
 
 ## Clear Workspace ---------------------------------------------------------
 rm(list=ls())

@@ -1,7 +1,11 @@
-##This script combines separate data into a new dataframe so that all discrete sample data is in one place
+##This script combines separate datasets into a combined station data dataframe so that all discrete sample data is in one place
+#Load carbonate chemistry data from the Florida Keys
+#Add nutrient data from samples taken at the same stations
+#Add PAR data from MODIS satellite data via ERDDAP
+#Add bathymetry data from the SLIM2D model mesh grid
 
 ##Heidi K. Hirsh
-##Last edit: Feb 19, 2025
+##Last edit: Feb 20, 2025
 
 ## Clear Workspace ---------------------------------------------------------
 rm(list=ls())
@@ -14,15 +18,13 @@ lapply(packageload, library, character.only = TRUE)
 
 ## LOAD Files:
 
-## Load filtered carbonate chemistry data (source: Ana Palacio) ----------------------------------------------------------
-CC <- read.csv('Flowshed_Modeling_InputData/FLK_filtered_ve4.csv') #source this from somewhere else.
+## Load filtered carbonate chemistry data ------------------------------------
+CC <- read.csv('Flowshed_Modeling_InputData/FLK_filtered_ve4.csv')
+# dim(CC) #1612
 
-# dim(CC) #1612   52
-
-## Load nutrient data (source: Alex Fine) ----------------------------------------------------------
+## Load nutrient data --------------------------------------------------------
 Nuts_original <- read.csv('Flowshed_Modeling_InputData/WS_Keys_Data_1998-2022_hh.csv')
-
-# dim(Nuts_original) # 3739   17
+# dim(Nuts_original) # 3739  
 
 ## Load bathymetry layer (from SLIM 2D model)
 bathy_sf <- st_read(dsn = "Flowshed_Modeling_InputData//mesh_florida",layer="mesh_florida")
@@ -30,17 +32,14 @@ bathy_sf <- st_read(dsn = "Flowshed_Modeling_InputData//mesh_florida",layer="mes
 #----------------------------------------------------------
 
 CC$jday= yday(CC$datetime)
-# unique(CC$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022
-
 CC$UTCDate_Time = as.POSIXct(CC$UTCDate_Time, tz="UTC")
 
 ## there is one point that does not have coordinates
 # dim(subset(CC,is.na(CC$Longitude)))
 # dim(subset(CC,is.na(CC$Latitude)))
-
 ## remove this point
 CC=subset(CC,!is.na(CC$Latitude) & !is.na(CC$Longitude))
-# dim(CC) #1611   52 (one removed)
+# dim(CC)
 
 ## What is the temporal coverage of data?
 # temporal = ggplot(data=CC,aes(x=jday,y=DIC_umol_kg,color=as.factor(Year)))+
@@ -51,7 +50,6 @@ CC=subset(CC,!is.na(CC$Latitude) & !is.na(CC$Longitude))
 #   scale_x_continuous(breaks = seq(0, 365, by = 10))
 # TS=Sys.time()
 # temporal
-
 
 ## Add visitID (this will be use to match discrete carbonate chemistry to other paired data (nutrients, water mass history, etc.)
 visitID_1 =  paste(CC$SiteID,CC$UTCDate_Time)
@@ -66,14 +64,12 @@ CC.sf = st_as_sf(CC, coords = c("Longitude","Latitude"), crs = st_crs(4326))
 ## Rename nutrient columns to avoid confusion when comparing to carbonate chemistry coordinates
 ## Note, coordinates should be the same sites
 Nuts= Nuts_original %>% dplyr::rename('Latitude.n'='Latitude', 'Longitude.n'='Longitude', 'Date.n'='Date')
-# names(Nuts)
 
 ## Name new coordinate columns so that this information is not lost when making it sf 
 Nuts$Longitude = Nuts$Longitude.n
 Nuts$Latitude = Nuts$Latitude.n
 Nuts.sf = st_as_sf(Nuts, coords = c("Longitude","Latitude"), crs = st_crs(4326))  
 # mapview(Nuts.sf,zcol='Station')
-# head(Nuts.sf)
 
 ## We do not need the point on the West Florida Shelf.
 # mapview(Nuts.sf,zcol="Station")
@@ -90,7 +86,6 @@ Nuts.sf$Station[which(Nuts.sf$Station == "21")] = "21LK"
 Nuts.sf = Nuts.sf[which(Nuts$Station != "KW1"),] 
 
 ## Create the matching visitIDs for the nutrient data
-
 ## Nutrients data date formatting is mildly infuriating so we are going to fix that:
 # Nuts.sf$Date.n    
 # Nuts.sf$Date[16] #"1/30/98"
@@ -99,16 +94,13 @@ Nuts.sf$Date.yyyymmdd = as.Date(Nuts.sf$Date.n, format= "%m/%d/%y")
 
 ## Pair date and time
 Nuts.sf$dateTime = str_c(Nuts.sf$Date.yyyymmdd, ' ', Nuts.sf$GMT)
-# Nuts.sf$dateTime[16] #"1998-01-30 18:45"
 Nuts.sf$UTCDate_Time = as.POSIXct(Nuts.sf$dateTime, tz="UTC") 
-# Nuts.sf$UTCDate_Time[16] #"1998-01-30 18:45:00 UTC"
 
 visitID_n1 = paste(Nuts.sf$Station,Nuts.sf$UTCDate_Time) #combine station name and datetime
 visitID_n2 = gsub(" ", "_" ,visitID_n1, perl=TRUE) #separate station, date, and time by "_"
 Nuts.sf$visitID =  gsub("[: -]", "" , visitID_n2, perl=TRUE) #remove all characters except "_"
-# Nuts.sf$visitID[16] #"16_19980130_184500"
-# dim(Nuts.sf) #3717   21
 
+ 
 ## Now, we can remove the extra "19" northern point
 ## The pesky point is visitID = 19_20160728_013600
 ## Save Nuts without this point
@@ -118,18 +110,9 @@ Nuts.sf = Nuts.sf[which(Nuts.sf$visitID !='19_20160728_013600'),]
 ##limit nutrients to same years as CC
 Nuts.sf$Year = format(Nuts.sf$UTCDate_Time, format="%Y")
 Nuts.sf$Year = as.integer(Nuts.sf$Year) 
-# unique(Nuts.sf$Year) #1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022
-CCyears = unique(CC$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022 
+CCyears = unique(CC$Year) 
 Nuts.sf = subset(Nuts.sf,Year %in% CCyears)
-# unique(Nuts.sf$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022
-# dim(Nuts.sf) # 2017   21
-# mapview(Nuts.sf,zcol='Year')
 
-## Merge CC and Nuts.sf
-# head(CC$visitID)
-# length(unique(CC$visitID)) #1610
-# head(Nuts.sf$visitID)
-# length(unique(Nuts.sf$visitID)) #2017
 
 ## Which visitIDs in CC do not have matching nutrients?
 noMatch = CC[which(is.na(match(CC$visitID,Nuts.sf$visitID))),]
@@ -145,7 +128,7 @@ CC=subset(CC, !visitID==unique(noMatch$visitID))
 
 CCnuts = left_join(CC, Nuts.sf, by=c("visitID","Year"))
 # names(CCnuts)
-# dim(CCnuts) #1610   74
+# dim(CCnuts) #1610 
 
 
 ## Check that CC and nutrient coordinates match: (they do)
@@ -231,9 +214,8 @@ colnames(CCpar_bathy)[colnames(CCpar_bathy) == 'bathymetry'] <- 'pointDepth'
 # class(CCpar_bathy)
 
 ## Remove geometry to save intermediate df for the next steps
-# CCout = CCpar_bathy %>% st_drop_geometry() #intermediate = CCnutsparbath
+# CCout = CCpar_bathy %>% st_drop_geometry() 
+## My intermediate file is "CCnutsparbath_9feb2024.csv" 
 
-
-##NEXT STEP: overlap CC dataframe (carbonate chemistry + nutrients + par + bathymetry) with flowshed data 
-
+## NEXT STEP: overlap CC dataframe (carbonate chemistry + nutrients + par + bathymetry) with flowshed data 
 
