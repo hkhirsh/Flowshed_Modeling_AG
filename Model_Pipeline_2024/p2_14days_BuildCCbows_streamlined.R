@@ -1,9 +1,9 @@
-##This script combines pairs flowshed spatial data with the point data dataframe. This allows us to add benthic data to the modeling dataframe. 
-##Relevant endmember data (based on relative water mass history north or south of the Keys) is also incorporated here. 
-##Run this script AFTER running 'buildStationDF.R' (for sampling station dataframe, CC below) and 'benthicOverlap_saveFlowsheds.R' for corresponding benthic data (from flowsheds)
+## This script combines pairs flowshed spatial data with the point data dataframe. This allows us to add benthic data to the modeling dataframe. 
+## Relevant endmember data (based on relative water mass history north or south of the Keys) is also incorporated here. 
+## Run this script AFTER running 'buildStationDF.R' (for sampling station dataframe, CC below) and 'benthicOverlap_saveFlowsheds.R' for corresponding benthic data (from flowsheds)
 
-##Heidi K. Hirsh
-##Last edit: Feb 20, 2025
+## Heidi K. Hirsh
+## Last edit: Feb 20, 2025
 
 ## Clear Workspace ---------------------------------------------------------
 rm(list=ls())
@@ -15,18 +15,17 @@ lapply(packageload, library, character.only = TRUE)
 
 sf_use_s2(FALSE) #nutrient point overlap with polygons will not work without this line!
 
-## LOAD files
-
 ## Load modeling dataframe built in P1 ----------------------------------------------------------
-#note, this dataframe will be read in as "CC" (again) for coding simplicity
-CC <- read.csv(file='Flowshed_Modeling_InputData/CCnutsparbath_9feb2024.csv')
+CC=NULL
+# CC=CCpar_bathy #if you are running after 'buildStationDF.R'
+CC <- read.csv(file='Flowshed_Modeling_InputData/CCnutsparbath_9feb2024.csv') #This dataframe is built in 'buildStationDF.R'
 
-##__________pair with fractions (add CCbbb to fractions df so we have all 14 days)
+##__________pair with fraction of time water for each station comes from north or south of the Keys
 #load fractions (proportional time north or south of the Keys)
 ptime  <- st_read('Flowshed_Modeling_InputData/EndmemberFraction/EndmemberFraction.shp')
 
-## Read in BBB (benthic bowties)
-## This comes from XXXX!!!!
+## Read in BBB (benthic bowties aka flowsheds with benthic data)
+## this shapefile is built in 'benthicOverlap_saveFlowsheds.R'
 BBB = st_read('Flowshed_Modeling_InputData/Concave_BowBenthic_14days_26april2024/Concave_BowBenthic_14days_26april2024.shp')
 
 ## Load points on west florida shelf
@@ -136,14 +135,6 @@ CC14d
 dim(CC14d) # 19292   99
 dim(CC14d)/14 #1378
 
-# table(table(which(is.na(CC14d),arr.ind=T)[,1]))  #only 2 rows have NAs
-# # 2    3    4    5    6    9   10   11   12   13   14   15   16   19   20   21   23   82   92 
-# # 1127 3948 3066  189   56   14  105    7 1127 5677 3500  189   56   28  119    7    7   14   14 
-# #too many NAs?
-
-
-#write out file
-# write.csv(CC14d, file='/Users/heidi.k.hirsh/Desktop/CCbbb14_10Feb2024.csv',row.names=F) 
 
 
 ###_________model endmember chemistry, assign admixture chemistry, compute deltas__________
@@ -151,13 +142,11 @@ CCf=NULL
 CCf=CC14d
 dim(CCf)
 
-#_______load northern endmember station data (and other cruise data - we don't need it all)
-# PTS = read.csv('/Users/heidi.k.hirsh/Documents/FLK_Model1/CC_dataframes/PTS.csv')
+## use stations from the west florida shelf
 PTS$Lat=PTS$Latitude_Dec_Deg
 PTS$Long=PTS$Longitude_Dec_Deg
 PTS=st_as_sf(PTS, coords = c("Long","Lat"),crs = st_crs(4326)) 
 
-# mapview(PTS,zcol='Year_UTC')
 
 # The most complete coverage is only available for Shark River (SR) and Middle Cape (MC) so we will use those only
 iwant = c("SR","MC")
