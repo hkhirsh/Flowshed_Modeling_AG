@@ -111,6 +111,6 @@ length(unique(north_na$simu)) #all forward
 mapview(north_na,zcol="site")
 
 
-#NEXT: pair this data from CC dataframe to match up site zones and regions for further exploration
-#merge with CC
+#NEXT: pair this data with CC dataframe to match up site zones and regions for further exploration
+
 

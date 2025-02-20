@@ -22,7 +22,7 @@ CC <- read.csv(file='Flowshed_Modeling_InputData/CCnutsparbath_9feb2024.csv')
 
 ##__________pair with fractions (add CCbbb to fractions df so we have all 14 days)
 #load fractions (proportional time north or south of the Keys)
-ptime  <- st_read('Flowshed_Modeling_InputData/BowtieFractions_Jan10/BowtieFractions_Jan10.shp')
+ptime  <- st_read('Flowshed_Modeling_InputData/EndmemberFraction/EndmemberFraction.shp')
 
 ## Read in BBB (benthic bowties)
 ## This comes from XXXX!!!!
