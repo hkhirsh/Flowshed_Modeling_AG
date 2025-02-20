@@ -1,8 +1,8 @@
-##This script combines separate datasets into a combined station data dataframe so that all discrete sample data is in one place
-#Load carbonate chemistry data from the Florida Keys
-#Add nutrient data from samples taken at the same stations
-#Add PAR data from MODIS satellite data via ERDDAP
-#Add bathymetry data from the SLIM2D model mesh grid
+## This script combines separate datasets into a combined station data dataframe so that all discrete sample data is in one place
+## Load carbonate chemistry data from the Florida Keys
+## Add nutrient data from samples taken at the same stations
+## Add PAR data from MODIS satellite data via ERDDAP
+## Add bathymetry data from the SLIM2D model mesh grid
 
 ##Heidi K. Hirsh
 ##Last edit: Feb 20, 2025
@@ -27,7 +27,7 @@ Nuts_original <- read.csv('Flowshed_Modeling_InputData/WS_Keys_Data_1998-2022_hh
 # dim(Nuts_original) # 3739  
 
 ## Load bathymetry layer (from SLIM 2D model)
-bathy_sf <- st_read(dsn = "Flowshed_Modeling_InputData//mesh_florida",layer="mesh_florida")
+bathy_sf <- st_read(dsn = "Flowshed_Modeling_InputData/mesh_florida",layer="mesh_florida")
 
 #----------------------------------------------------------
 
