@@ -7,7 +7,7 @@
 rm(list=ls())
 
 ## Load Libraries ----------------------------------------------------------
-packageload <- c("ggmagnify")
+packageload <- c("ggmagnify","ggpubr","gtsummary","dplyr",'viridis')
 # packageload <- c('tidyverse','patchwork','MuMIn','PNWColors','ghibli','ggtext','ggfx','ggmagnify')
 lapply(packageload, library, character.only = TRUE)
 
@@ -426,8 +426,73 @@ for (RYi in 1:length(RYs)) {
 ## Load this output to recreate Figures 6 & 7
 ## My model output file is "ModCol_TrainTest_notOceanic_v2_1.csv"
 
+## Summarize parameter input in table (This is Table 2 in the manuscript)
+theme_gtsummary_language("en", big.mark = "") #remove the comma in the numbers
+#Subset to parameters I was to summarize:
+
+#clean up the input data to summarize
+CClim2 = 
+  CCorig %>% 
+  select('Zone','Sub_region','pointDepth','Temperature_C','Salinity_Bottle','DIC_umol_kg','TA_umol_kg','Chla','NO3','PAR_MODIS_MON') %>% #remove year and volume
+  dplyr::mutate(Sub_region=factor(Sub_region,labels=c("Biscayne","Upper Keys","Middle Keys","Lower Keys"))) %>% 
+  dplyr::mutate(Zone=factor(Zone,labels=c("Inshore","Mid-channel","Offshore","Oceanic"))) %>% 
+  dplyr::rename(Region=Sub_region,PAR=PAR_MODIS_MON, TA=TA_umol_kg, DIC=DIC_umol_kg,Chlorophyll=Chla, 
+                Nitrate=NO3,Temperature=Temperature_C,Salinity=Salinity_Bottle,Depth=pointDepth)
+dim(CClim2) #13776
+
+##don't include oceanic
+CClim3 = subset(CClim2, Zone != "Oceanic")
+table(CClim3$Zone)
+dim(CClim3) #9310
+
+# table(CClim2$Region,CClim2$Zone)
+# table(CClim3$Region,CClim3$Zone)
 
 
+## summarize and report range and mean (sd) 
+
+TableAllcols = c("{min}-{max}","{mean} ({sd})") %>%
+  lapply(
+    function(.x) {
+      tbl_summary(
+        data = CClim3,
+        include = c(Depth,Temperature,Salinity,DIC,TA,Chlorophyll,Nitrate,PAR),
+        statistic = everything() ~ .x,
+        missing = "no"
+      ) %>%
+        modify_header(all_stat_cols() ~ "edit here")  #spend too much time trying to change these labels to "range" and "mean (sd)"
+    }
+  ) %>%
+  tbl_merge() %>%
+  modify_spanning_header(everything() ~ NA) %>%
+  modify_footnote(everything() ~ NA) %>%
+  modify_header(label="**Parameter**") 
+TableAllcols
+
+
+
+#separate rows
+CClim3 |> select(Depth,Temperature,Salinity,DIC,TA,Chlorophyll,Nitrate,PAR) |> 
+  tbl_summary( 
+    type = all_continuous() ~ "continuous2", 
+    statistic = all_continuous() ~ c("{mean}({sd})", "{min}-{max}"), 
+  ) |> 
+  add_stat_label(label = ~ c("Mean (sd)", "Range"))%>%
+  bold_labels() %>% 
+  italicize_levels()
+
+
+
+#Summarize zone and region breakdown
+Table.ALL = CClim3 %>% 
+  tbl_summary(
+    include = c(Region,Zone),
+    missing = "no") %>%
+  modify_footnote(everything() ~ NA) %>%
+  modify_header(label="**Model Input**") %>% 
+  bold_labels() %>% 
+  italicize_levels()
+Table.ALL
 
 
 
