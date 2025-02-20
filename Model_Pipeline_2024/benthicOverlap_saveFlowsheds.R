@@ -7,7 +7,6 @@
 rm(list = ls()) #clear environment
 
 # Load packages ----
-# packageload <- c("sf","tidyverse","ggmap","ggrepel","rstudioapi","stringr","sp","raster","rgeos","patchwork","mapview","leaflet","ggplot2")   #plotting/mapping packages: "ggmap","ggplot2","patchwork","mapview","leaflet"
 packageload <- c("sf","stringr","raster","dplyr","sp","mapview","leaflet")
 lapply(packageload, library, character.only = TRUE)
 
@@ -23,16 +22,11 @@ benthicLU = read.csv("Flowshed_Modeling_InputData/ClassLv4_BenthicLookup_V1_Rank
 #translates benthic categories in the unified reef map into target taxonomy
 
 # List bow tie files (14 day backward and forward extended triangles)
-bow_fl = list.files("Flowshed_Modeling_InputData/bow_ties_shp_extended_tri_ALL/14days", full.names = T) #New 1376 full file version
+bow_fl = list.files("Flowshed_Modeling_InputData/bow_ties_shp_extended_tri_ALL/14days", full.names = T) #1376 full file version
 # length(bow_fl) #1376
-
 
 # Loop through each bow tie shapefile and buffer out/in to create a more complete "footprint" of the water mass.
 # Without the buffer out/in step, there can be lots of discontinuous polygons if the particle "jumped" between time points and did not occupy ever mesh grid cell. 
-
-#running this loop at 10:28am on April 22, 2024
-#at 11:46 it is at 687/1376
-#finish at 13:34
 
 yearBows = NULL  #note: we call it yearBows because in a previous version I looped through each year first (easier to keep naming consistent)
 
@@ -45,12 +39,9 @@ for (f_i in 1:length(bow_fl)) {
   
   bows=NULL
   bows.original = st_read(dsn = bow_fl[f_i], layer = layerName)
-
-  #concave buffer out and in
   bows_utm17 = st_transform(bows.original, 26917)
-
-  crs(bows_utm17) #NAD83
   
+  #Concave buffer out, then back in
   D = 300 #(buffer width in meters)
   bows.bo = st_buffer(bows_utm17, dist = D, nQuadSegs = 30)
   bows.bi = st_buffer(bows.bo, dist = -D, nQuadSegs = 30)
@@ -106,10 +97,6 @@ for (f_i in 1:length(bow_fl)) {
 # ## These intermediate files are saved in a folder called "yearBows_22april2024"
 
 
-
-#Buffer out and back in (to capture shallow areas)
-## Is the original volume (From T. Dobbelaere based on original - disparate - polgyons) inaccurate now because I buffered out? - not a meaningful difference
-
 # ## Plot bows
 # mapview(bows_utm17, color='red')+mapview(bows.bo)
 # 
@@ -126,7 +113,6 @@ for (f_i in 1:length(bow_fl)) {
 #   addProviderTiles('Esri.WorldImagery') %>%
 #   addPolygons(data=subset(ploThis_t,simu=='backward'),fillOpacity=0.1,weight=1,color = ~pal(d))
 
-#***CHECK CRS for combining with other data!
 
 
 # ________________________________ADD BENTHIC INDICES_____________________________________
@@ -141,7 +127,6 @@ yearBows=all.yearBows
 # dim(yearBows) #38612
 # class(yearBows)
 
-## I began benthic overlap loop at 8:10am Dec 29 (estimated 14 hours)
 benthicBows=NULL
 benthicBows=yearBows
 # dim(benthicBows)
@@ -161,18 +146,13 @@ benthicBows[, 'PercentCheck'] = NA
 # head(benthicBows)
 
 
-## test Bbow
-# Bbow = yearBows[1,]
-## Bbow is not defined so st_crs for something else must be used below. 
-
-
 ## Tranform coral_sf to match Bbow CRS:
 coral_sf.t = st_transform(coral_sf, st_crs(benthicBows))
 coral_sf.tmv = st_make_valid(coral_sf.t)
 coral_sf.tv = coral_sf.tmv[which(st_is_valid(coral_sf.tmv)),] #only use valid polygons
 
 
-## check validity of coral_sf.tmv - reef map habitat polygons after transformation and making valid
+## check/confirm validity of coral_sf.tmv - reef map habitat polygons after transformation and making valid
 which(!st_is_valid(coral_sf.tmv)) #none - all are valid
 #check validity of benthicBows
 which(!st_is_valid(benthicBows)) #none - all are valid
@@ -194,10 +174,7 @@ for (b_i in 1:nrow(benthicBows)) {
 
   over_crop_bow = st_intersection(coral_crop, Bbow)
   #get intersection of every independent polygon in habitat map with my bowtie
-  
 
-  
-  # st_crs(over_bow)
   print('done with intersection')
   
   over_bow=over_crop_bow
@@ -214,14 +191,10 @@ for (b_i in 1:nrow(benthicBows)) {
   
 
   BowWeight = left_join(bowComp, benthicLU, by = 'ClassLv4')
-  # BowWeight$NBTest = 1-BowWeight$Bio
-  # BowWeight$NBTestIndex = BowWeight$a*BowWeight$NBTest
-  #NONONO BowWeight$NotBio = 1-BowWeight$Bio
-  # I think this calculation would include land categories. Instead, use NotBio from LU
   
   #biomass index for each class
   BowWeight$Ci = BowWeight$a * BowWeight$Coral
-  BowWeight$Ai = BowWeight$a * BowWeight$Algae #fix spelling!
+  BowWeight$Ai = BowWeight$a * BowWeight$Algae 
   BowWeight$Si = BowWeight$a * BowWeight$Seagrass
   BowWeight$NBi = BowWeight$a * BowWeight$NotBio
   BowWeight$NCo = BowWeight$a * BowWeight$BioNoCoral #should be sum of seagrass and algae
