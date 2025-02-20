@@ -19,29 +19,20 @@ sf_use_s2(FALSE) #nutrient point overlap with polygons will not work without thi
 ## Load modeling dataframe built in P1 ----------------------------------------------------------
 #note, this dataframe will be read in as "CC" (again) for coding simplicity
 CC <- read.csv(file='Flowshed_Modeling_InputData/CCnutsparbath_9feb2024.csv')
-dim(CC) #1612   83
-names(CC)
-unique(CC$Year) #2010 2011 2012 2014 2015 2016 2017 2018 2019 2020 2021 2022 (we will not use 2010,2011,2022)
 
-#Alternative: first pair CC with ptime to add all ndays worth of fractions: 
-##NOTE! This has all the bowtie infomration (14 days and backward/forward)
-#I think?
 ##__________pair with fractions (add CCbbb to fractions df so we have all 14 days)
-#load fractions (proportional time)
+#load fractions (proportional time north or south of the Keys)
 ptime  <- st_read('Flowshed_Modeling_InputData/BowtieFractions_Jan10/BowtieFractions_Jan10.shp')
-# dim(ptime) #38500     6
-# dim(ptime)/28 #(14 forward and back) #1375
-
 
 ## Read in BBB (benthic bowties)
+## This comes from XXXX!!!!
 BBB = st_read('Flowshed_Modeling_InputData/Concave_BowBenthic_14days_26april2024/Concave_BowBenthic_14days_26april2024.shp')
 
-
 ## Load points on west florida shelf
-PTS = read.csv('/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/PTS.csv')
+PTS = read.csv('Flowshed_Modeling_InputData/PTS.csv')
 
-names(ptime)
-## Rename (why do names change with the original save?)
+# names(ptime)
+## Rename columns
 names(ptime)[names(ptime) == 'sampl_d'] <- 'sample_id'
 names(ptime)[names(ptime) == 'nrth_fr'] <- 'north_fraction'
 names(ptime)[names(ptime) == 'sth_frc'] <- 'south_fraction'
@@ -331,7 +322,7 @@ MODEL=CCmod
 msave = subset(MODEL, select = -c(geometry)) 
 #no geometry!
 
-#write CCmodelDF
+#write CCmodelDF (save intermediate)
 # write.csv(msave,file='/Users/heidi.k.hirsh/Desktop/CCmodelDF_April26.csv',row.names=FALSE)
 dim(msave) # 19222   117 (I'm getting 19292 116 now)
 
@@ -344,4 +335,53 @@ dim(msave) # 19222   117 (I'm getting 19292 116 now)
 #benthic bowtie data
 #oceanic reference data
 #predicted northern and southern endmember chemistry
+
+
+## Save complete cases (all input parameters available for each sample) for final model dataframe
+CCfull.all = msave
+# CCfull.all = read.csv(file='/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/CCmodelDF_April26.csv')
+# unique(CCfull.all$ndays)
+# dim(CCfull.all) / 14 #1376   
+
+
+## Make sure all samples have zone information
+# dim(CCfull.all) #19264   116
+goodZone = which(!is.na(CCfull.all$Zone)) 
+# length(goodZone) #19264 #all rows are good
+CCfull.all = CCfull.all[goodZone,]
+# dim(CCfull.all) / 14  #1376
+CCfull=CCfull.all
+
+
+#add inverse volume
+CCfull$inverseVol = 1 / CCfull$vol_km3
+#add inverse habitat 
+CCfull$invHab = 1 / CCfull$pointDepth
+
+## Convert to numbered months
+CCfull$date=as.Date(CCfull$Date,format="%Y-%m-%d")
+# class(CCfull$date)
+CCfull$M=format(CCfull$date, format="%B")
+CCfull$M2=format(CCfull$date, format="%m")
+CCfull$month = as.numeric(CCfull$M2)
+# class(CCfull$month)
+sort(unique(CCfull$month))
+
+
+##________________________________
+
+## need to filter out NA values for model input
+## look at just the input parameter columns(parameters that will be specifically included in the models)
+IN = c("CALC_m2","ALGi_m2","SGi_m2","Chla","NO3","inverseVol","Month","month","Salinity_Bottle","Temperature_C","hrod.lst",
+       "DIC_delta.S", "DIC_delta.NS", "TA_delta.S", "TA_delta.NS","Year")
+# summary(CCfull[, IN])
+
+## Data needs to be the same length for each model so we need to keep only the data where every sample has information for every parameter
+CCgood = CCfull[complete.cases(CCfull[IN]),]
+# dim(CCgood)/14 #984
+# unique(CCgood$Zone)
+# unique(CCgood$Sub_region)
+
+## Save complete cases: 
+# write.csv(CCgood, file="Flowshed_Modeling_IntermediateFiles/CC_completeCases.csv",row.names=FALSE)
 

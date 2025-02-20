@@ -15,15 +15,17 @@ lapply(packageload, library, character.only = TRUE)
 ## LOAD Files:
 
 ## Load filtered carbonate chemistry data (source: Ana Palacio) ----------------------------------------------------------
-CC <- read.csv('/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/FLK_filtered_ve4.csv') #source this from somewhere else.
+CC <- read.csv('Flowshed_Modeling_InputData/FLK_filtered_ve4.csv') #source this from somewhere else.
+
 # dim(CC) #1612   52
 
 ## Load nutrient data (source: Alex Fine) ----------------------------------------------------------
-Nuts_original <- read.csv('/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/WS_Keys_Data_1998-2022_hh.csv')
+Nuts_original <- read.csv('Flowshed_Modeling_InputData/WS_Keys_Data_1998-2022_hh.csv')
+
 # dim(Nuts_original) # 3739   17
 
 ## Load bathymetry layer (from SLIM 2D model)
-bathy_sf <- st_read(dsn = "/Users/heidi.k.hirsh/Desktop/Hirsh_FLKmodel_InputFiles/mesh_florida",layer="mesh_florida")
+bathy_sf <- st_read(dsn = "Flowshed_Modeling_InputData//mesh_florida",layer="mesh_florida")
 
 #----------------------------------------------------------
 

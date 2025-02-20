@@ -16,7 +16,10 @@ shapefile_list = lapply(shp.list,read_sf)
 all.yearBows = rbind(shapefile_list[[1]],shapefile_list[[2]],shapefile_list[[3]],shapefile_list[[4]])
 yearBows=all.yearBows
 
+FLKs1=st_read('Flowshed_Modeling_InputData/Florida_Shoreline_(1_to_12%2C000_Scale)/Florida_Shoreline_(1_to_12%2C000_Scale).shp')
+
 CC = read.csv('Flowshed_Modeling_InputData/CCflk_plusBathy.csv',na.strings=c(""," "))
+# CC=read.csv('Flowshed_Modeling_InputData/CC_complete_cases_26april2024.csv')
 
 #subset the carb chem data to represent the years we want and a subset of SiteIDs
 CCyr = subset(CC,Year %in% c('2012','2013','2014','2015','2016','2017','2018','2019','2020','2021')) #subset of chemistry samples that match flowsheds
@@ -52,8 +55,7 @@ plotData_t = st_transform(plotData,crs='+proj=longlat +datum=WGS84')
 
 
 
-################## Define appropriate benthic habitat
-FLKs1=st_read('Flowshed_Modeling_InputData/Florida_Shoreline_(1_to_12%2C000_Scale)/Florida_Shoreline_(1_to_12%2C000_Scale).shp')
+##### Define appropriate benthic habitat for Figure 5
 coral_sf =  st_read(dsn = "Flowshed_Modeling_InputData/FWC_UnifiedFloridaReefMap_v2.0.gdb", layer="UnifiedReefMap")
 
 plotMe = subset(plotData_t,MY=="2019-07")
@@ -102,7 +104,7 @@ nday_LINE_scale  <- scale_linetype_manual(name = "Number of days", values = nday
                                            labels = c('1','3','5','7'))
 
 ##___________________________
-
+plot5 = subset(plotData_t,n_days %in% c(1,3,5,7) & MY=="2019-07")
 
 Fig5a=ggplot(data = FLKs1) +
   geom_sf(data=coral_sfC.tv,aes(fill=ClassLv1),lwd=0,alpha=.7)+
@@ -112,7 +114,7 @@ Fig5a=ggplot(data = FLKs1) +
   coord_sf(xlim = c(-82.1, -80.1), ylim = c(24.48, 25.7), expand = FALSE) + 
   theme_bw()+
   theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
-  geom_rect(aes(xmin=st_bbox(plotA)[1],xmax=st_bbox(plotA)[3],ymin=st_bbox(plotA)[2],ymax=st_bbox(plotA)[4]), color='black',lwd=.9,fill=NA)+
+  geom_rect(aes(xmin=st_bbox(plot5)[1],xmax=st_bbox(plot5)[3],ymin=st_bbox(plot5)[2],ymax=st_bbox(plot5)[4]), color='black',lwd=.9,fill=NA)+
   theme(axis.text=element_text(size=12),axis.title=element_text(size=14))+
   ylab('Latitude')+
   xlab('Longitude')+
@@ -130,21 +132,20 @@ FL=ggplot(data = FLKs1) +
 FL
 # ggsave(filename=paste0("Flowshed_Modeling_Figures/Fig5aBox.png"),plot=FL,width=10, height=10, dpi = 300)
 
-plot5b = subset(plotData_t,n_days %in% c(1,3,5,7) & MY=="2019-07")
 
 Fig5b = ggplot(FLKs1)+
   geom_sf(data=coral_sfC.tv,aes(fill=ClassLv1),lwd=0,alpha=.7)+
   geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.3)+
   geom_sf(fill = "gray50", lwd = 0) +
   geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=.3)+
-  geom_sf(data=plot5b,aes(linetype=as.factor(n_days)),color='black',inherit.aes = FALSE,alpha=0,lwd=1.2)+
+  geom_sf(data=plot5,aes(linetype=as.factor(n_days)),color='black',inherit.aes = FALSE,alpha=0,lwd=1.2)+
   nday_LINE_scale +
   geom_star(aes(x=Longitude,y=Latitude),fill='black',color="black",data=plotMe,size=6,starstroke=.5)+
   class1_FILL_scale+
   guides(linetype=FALSE)+
   theme_bw()+
-  scale_x_continuous(limits=st_bbox(plotA)[c(1,3)])+
-  scale_y_continuous(limits=st_bbox(plotA)[c(2,4)])+
+  scale_x_continuous(limits=st_bbox(plot5)[c(1,3)])+
+  scale_y_continuous(limits=st_bbox(plot5)[c(2,4)])+
   ylab('Latitude')+
   xlab('Longitude')+
   theme(axis.line = element_line(color='black'),
@@ -192,20 +193,20 @@ line = ggplot(df)+
 line
 
 
-# ## Map of the Keys with habitat key and sampling points 
+# ## Map of the Keys with habitat key and sampling points
 # keys2=ggplot(data = FLKs1) +
 #   geom_sf(data=coral_sfC.tv,aes(fill=ClassLv1),lwd=0,alpha=.7)+
 #   # geom_sf(data=coral_sfC.tv,aes(fill=ClassLv1),lwd=0,alpha=.7)+
 #   geom_point(data=CCyr.s,aes(x=dec.lon,y=dec.lat),color="black",size=1)+
 #   geom_sf(fill = "gray50", lwd = 0) +
 #   class1_FILL_scale+
-#   coord_sf(xlim = c(-83, -80), ylim = c(24.3, 26.5), expand = FALSE) + 
+#   coord_sf(xlim = c(-83, -80), ylim = c(24.3, 26.5), expand = FALSE) +
 #   theme_bw()+
 #   theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank())+
-#   # geom_rect(aes(xmin=st_bbox(plotA)[1],xmax=st_bbox(plotA)[3],ymin=st_bbox(plotA)[2],ymax=st_bbox(plotA)[4]), color='black',lwd=.9,fill=NA)+
+#   # geom_rect(aes(xmin=st_bbox(plot5)[1],xmax=st_bbox(plot5)[3],ymin=st_bbox(plot5)[2],ymax=st_bbox(plot5)[4]), color='black',lwd=.9,fill=NA)+
 #   theme(axis.text=element_text(size=12),axis.title=element_text(size=14))+
 #   ylab('Latitude')+
 #   xlab('Longitude')
 #   # theme(legend.position="none")
 # keys2
-# ggsave(filename=paste0("Flowshed_Modeling_Figures/Keys_",Sys.time(),".png"),plot=keys2,width=10, height=10, dpi = 300)
+# # ggsave(filename=paste0("Flowshed_Modeling_Figures/Keys_",Sys.time(),".png"),plot=keys2,width=10, height=10, dpi = 300)
