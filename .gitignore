@@ -22,7 +22,7 @@
 /Flowshed_Modeling_InputData/bow_ties_shp_extended_tri_ALL
 
 # Ignore Figure writing folder
-/Flowshed_Modeling_figures
+#/Flowshed_Modeling_figures
 
 # Never allow shapefiles
 *.dbf
