@@ -9,3 +9,15 @@ This repository contains data and analysis scripts for the manuscript:
 This repository contains the data and code used to build increasingly complex models to predict carbonate chemistry (DIC and TA) in the Florida Keys. 
 
 ### Contents:
+
+#### 1. Input data files:
+* **Flowshed_Modeling_InputData:** This folder includes the data files required to run the code in the modeling pipeline.
+(specific file descriptions coming)
+
+#### 2. Scripts to build dataframe and models:
+* **Flowshed_Modeling_Pipeline:** This folder icludes the R scripts required to build the final modeling dataframe, create, and run models. 
+(final versions needed for 'makingPTS.R' and 'p2_14days_BuildCCbows_streamlined.R')
+
+#### 3. Scripts for figures:
+* **Flowshed_Modeling_Figures:** This folder includes the R scripts required to recreate the figures manuscript.
+Note, only figures created in R (Figures 1, 4, 5, 6, 7) are included here.
