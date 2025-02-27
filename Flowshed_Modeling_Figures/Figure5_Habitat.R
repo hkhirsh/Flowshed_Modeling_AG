@@ -158,8 +158,8 @@ Fig5b
 
 
 ##simple plot to get line types
-nday_lines     <-c("dashed","dotted","solid","twodash")
-nday_LINE_scale  <- scale_linetype_manual(name = "Number of days", values = nday_lines,breaks = c('1','3','5','7'),labels = c('1','3','5','7'))
+# nday_lines     <-c("dashed","dotted","solid","twodash")
+# nday_LINE_scale  <- scale_linetype_manual(name = "Number of days", values = nday_lines,breaks = c('1','3','5','7'),labels = c('1','3','5','7'))
 
 #fix order!
 x=c(1,2,3,4,5,6,7,8,9,10)
@@ -175,10 +175,10 @@ for (i in 1:length(df$x)){
 }
 
 line = ggplot(df)+
-  geom_line(aes(x,y7),linetype='dotdash',lwd=.77)+
-  geom_line(aes(x,y5),linetype='dotted',lwd=.77)+
-  geom_line(aes(x,y3),linetype='solid',lwd=.77)+
-  geom_line(aes(x,y1),linetype='twodash',lwd=.77)+
+  geom_line(aes(x,y7),linetype='dashed',lwd=1)+
+  geom_line(aes(x,y5),linetype='dotted',lwd=1)+
+  geom_line(aes(x,y3),linetype='solid',lwd=1)+
+  geom_line(aes(x,y1),linetype='twodash',lwd=1)+
   theme(axis.line = element_line(color='black'),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())+
@@ -191,7 +191,7 @@ line = ggplot(df)+
         panel.border = element_blank(),
         panel.background = element_blank())
 line
-
+ggsave(filename="Flowshed_Modeling_Figures/line.png",plot=line,width=4, height=4, dpi = 300)
 
 # ## Map of the Keys with habitat key and sampling points
 # keys2=ggplot(data = FLKs1) +

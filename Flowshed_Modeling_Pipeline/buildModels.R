@@ -429,21 +429,26 @@ for (RYi in 1:length(RYs)) {
 ## Summarize parameter input in table (This is Table 2 in the manuscript)
 theme_gtsummary_language("en", big.mark = "") #remove the comma in the numbers
 #Subset to parameters I was to summarize:
+CCtab=subset(CCorig, ndays==1)
+# table(CCorig$ndays)
+# table(CCtab$ndays)
 
 #clean up the input data to summarize
 CClim2 = 
-  CCorig %>% 
+  CCtab %>% 
+  # CCorig %>% 
   select('Zone','Sub_region','pointDepth','Temperature_C','Salinity_Bottle','DIC_umol_kg','TA_umol_kg','Chla','NO3','PAR_MODIS_MON') %>% #remove year and volume
   dplyr::mutate(Sub_region=factor(Sub_region,labels=c("Biscayne","Upper Keys","Middle Keys","Lower Keys"))) %>% 
   dplyr::mutate(Zone=factor(Zone,labels=c("Inshore","Mid-channel","Offshore","Oceanic"))) %>% 
   dplyr::rename(Region=Sub_region,PAR=PAR_MODIS_MON, TA=TA_umol_kg, DIC=DIC_umol_kg,Chlorophyll=Chla, 
                 Nitrate=NO3,Temperature=Temperature_C,Salinity=Salinity_Bottle,Depth=pointDepth)
-dim(CClim2) #13776
+dim(CClim2) #984
+table(CClim2$Zone)
 
 ##don't include oceanic
 CClim3 = subset(CClim2, Zone != "Oceanic")
-table(CClim3$Zone)
-dim(CClim3) #9310
+table(CClim3$Zone)    
+dim(CClim3) #665
 
 # table(CClim2$Region,CClim2$Zone)
 # table(CClim3$Region,CClim3$Zone)
